@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="core_inference_bram_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="core_inference_bram_tb" />
+            <top_module name="fixed_point_utils" />
+            <top_module name="glbl" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="573.730 ns"></ZoomStartTime>
+      <ZoomEndTime time="1,022.731 ns"></ZoomEndTime>
+      <Cursor1Time time="715.000 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="220"></NameColumnWidth>
+      <ValueColumnWidth column_width="116"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="25" />
+   <wvobject fp_name="/core_inference_bram_tb/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_inference_bram_tb/rst_l" type="logic">
+      <obj_property name="ElementShortName">rst_l</obj_property>
+      <obj_property name="ObjectShortName">rst_l</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_inference_bram_tb/start" type="logic">
+      <obj_property name="ElementShortName">start</obj_property>
+      <obj_property name="ObjectShortName">start</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_inference_bram_tb/clear_kv_cache" type="logic">
+      <obj_property name="ElementShortName">clear_kv_cache</obj_property>
+      <obj_property name="ObjectShortName">clear_kv_cache</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_inference_bram_tb/token_id" type="array">
+      <obj_property name="ElementShortName">token_id[4:0]</obj_property>
+      <obj_property name="ObjectShortName">token_id[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_inference_bram_tb/pos_id" type="array">
+      <obj_property name="ElementShortName">pos_id[3:0]</obj_property>
+      <obj_property name="ObjectShortName">pos_id[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_inference_bram_tb/busy" type="logic">
+      <obj_property name="ElementShortName">busy</obj_property>
+      <obj_property name="ObjectShortName">busy</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_inference_bram_tb/valid_out" type="logic">
+      <obj_property name="ElementShortName">valid_out</obj_property>
+      <obj_property name="ObjectShortName">valid_out</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_inference_bram_tb/logits_out" type="array">
+      <obj_property name="ElementShortName">logits_out[431:0]</obj_property>
+      <obj_property name="ObjectShortName">logits_out[431:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_inference_bram_tb/probs_out" type="array">
+      <obj_property name="ElementShortName">probs_out[431:0]</obj_property>
+      <obj_property name="ObjectShortName">probs_out[431:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_inference_bram_tb/next_token" type="array">
+      <obj_property name="ElementShortName">next_token[4:0]</obj_property>
+      <obj_property name="ObjectShortName">next_token[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_inference_bram_tb/end_token" type="logic">
+      <obj_property name="ElementShortName">end_token</obj_property>
+      <obj_property name="ObjectShortName">end_token</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_inference_bram_tb/VOCAB_SIZE" type="array">
+      <obj_property name="ElementShortName">VOCAB_SIZE[31:0]</obj_property>
+      <obj_property name="ObjectShortName">VOCAB_SIZE[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_inference_bram_tb/BLOCK_SIZE" type="array">
+      <obj_property name="ElementShortName">BLOCK_SIZE[31:0]</obj_property>
+      <obj_property name="ObjectShortName">BLOCK_SIZE[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_inference_bram_tb/N_EMBD" type="array">
+      <obj_property name="ElementShortName">N_EMBD[31:0]</obj_property>
+      <obj_property name="ObjectShortName">N_EMBD[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_inference_bram_tb/N_HEAD" type="array">
+      <obj_property name="ElementShortName">N_HEAD[31:0]</obj_property>
+      <obj_property name="ObjectShortName">N_HEAD[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_inference_bram_tb/DATA_WIDTH" type="array">
+      <obj_property name="ElementShortName">DATA_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">DATA_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_inference_bram_tb/ACC_WIDTH" type="array">
+      <obj_property name="ElementShortName">ACC_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ACC_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_inference_bram_tb/FRAC_BITS" type="array">
+      <obj_property name="ElementShortName">FRAC_BITS[31:0]</obj_property>
+      <obj_property name="ObjectShortName">FRAC_BITS[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_inference_bram_tb/TOKEN_WIDTH" type="array">
+      <obj_property name="ElementShortName">TOKEN_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">TOKEN_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_inference_bram_tb/POS_WIDTH" type="array">
+      <obj_property name="ElementShortName">POS_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">POS_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_inference_bram_tb/dut/state" type="array">
+      <obj_property name="ElementShortName">state[5:0]</obj_property>
+      <obj_property name="ObjectShortName">state[5:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_inference_bram_tb/dut/q_vec" type="array">
+      <obj_property name="ElementShortName">q_vec[255:0]</obj_property>
+      <obj_property name="ObjectShortName">q_vec[255:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_inference_bram_tb/dut/k_vec" type="array">
+      <obj_property name="ElementShortName">k_vec[255:0]</obj_property>
+      <obj_property name="ObjectShortName">k_vec[255:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/core_inference_bram_tb/dut/v_vec" type="array">
+      <obj_property name="ElementShortName">v_vec[255:0]</obj_property>
+      <obj_property name="ObjectShortName">v_vec[255:0]</obj_property>
+   </wvobject>
+</wave_config>

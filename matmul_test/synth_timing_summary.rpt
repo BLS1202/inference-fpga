@@ -1,0 +1,1362 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2023.1 (win64) Build 3865809 Sun May  7 15:05:29 MDT 2023
+| Date         : Tue Aug  4 16:19:45 2026
+| Host         : Thinkpadp14 running 64-bit major release  (build 9200)
+| Command      : report_timing_summary -delay_type max -max_paths 10 -file C:/Users/bertl/Desktop/project/inference-fpga/matmul_test/synth_timing_summary.rpt
+| Design       : matmul_test
+| Device       : 7a100t-csg324
+| Speed File   : -1  PRODUCTION 1.23 2018-06-13
+| Design State : Synthesized
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Summary Report
+
+------------------------------------------------------------------------------------------------
+| Timer Settings
+| --------------
+------------------------------------------------------------------------------------------------
+
+  Enable Multi Corner Analysis               :  Yes
+  Enable Pessimism Removal                   :  Yes
+  Pessimism Removal Resolution               :  Nearest Common Node
+  Enable Input Delay Default Clock           :  No
+  Enable Preset / Clear Arcs                 :  No
+  Disable Flight Delays                      :  No
+  Ignore I/O Paths                           :  No
+  Timing Early Launch at Borrowing Latches   :  No
+  Borrow Time for Max Delay Exceptions       :  Yes
+  Merge Timing Exceptions                    :  Yes
+
+  Corner  Analyze    Analyze    
+  Name    Max Paths  Min Paths  
+  ------  ---------  ---------  
+  Slow    Yes        Yes        
+  Fast    Yes        Yes        
+
+
+------------------------------------------------------------------------------------------------
+| Report Methodology
+| ------------------
+------------------------------------------------------------------------------------------------
+
+No report available as report_methodology has not been run prior. Run report_methodology on the current design for the summary of methodology violations.
+
+
+
+check_timing report
+
+Table of Contents
+-----------------
+1. checking no_clock (0)
+2. checking constant_clock (0)
+3. checking pulse_width_clock (0)
+4. checking unconstrained_internal_endpoints (0)
+5. checking no_input_delay (2)
+6. checking no_output_delay (16)
+7. checking multiple_clock (0)
+8. checking generated_clocks (0)
+9. checking loops (0)
+10. checking partial_input_delay (0)
+11. checking partial_output_delay (0)
+12. checking latch_loops (0)
+
+1. checking no_clock (0)
+------------------------
+ There are 0 register/latch pins with no clock.
+
+
+2. checking constant_clock (0)
+------------------------------
+ There are 0 register/latch pins with constant_clock.
+
+
+3. checking pulse_width_clock (0)
+---------------------------------
+ There are 0 register/latch pins which need pulse_width check
+
+
+4. checking unconstrained_internal_endpoints (0)
+------------------------------------------------
+ There are 0 pins that are not constrained for maximum delay.
+
+ There are 0 pins that are not constrained for maximum delay due to constant clock.
+
+
+5. checking no_input_delay (2)
+------------------------------
+ There are 2 input ports with no input delay specified. (HIGH)
+
+ There are 0 input ports with no input delay but user has a false path constraint.
+
+
+6. checking no_output_delay (16)
+--------------------------------
+ There are 16 ports with no output delay specified. (HIGH)
+
+ There are 0 ports with no output delay but user has a false path constraint
+
+ There are 0 ports with no output delay but with a timing clock defined on it or propagating through it
+
+
+7. checking multiple_clock (0)
+------------------------------
+ There are 0 register/latch pins with multiple clocks.
+
+
+8. checking generated_clocks (0)
+--------------------------------
+ There are 0 generated clocks that are not connected to a clock source.
+
+
+9. checking loops (0)
+---------------------
+ There are 0 combinational loops in the design.
+
+
+10. checking partial_input_delay (0)
+------------------------------------
+ There are 0 input ports with partial input delay specified.
+
+
+11. checking partial_output_delay (0)
+-------------------------------------
+ There are 0 ports with partial output delay specified.
+
+
+12. checking latch_loops (0)
+----------------------------
+ There are 0 combinational latch loops in the design through latch input
+
+
+
+------------------------------------------------------------------------------------------------
+| Design Timing Summary
+| ---------------------
+------------------------------------------------------------------------------------------------
+
+    WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+    -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+      0.671        0.000                      0                  558        5.500        0.000                       0                   273  
+
+
+All user specified timing constraints are met.
+
+
+------------------------------------------------------------------------------------------------
+| Clock Summary
+| -------------
+------------------------------------------------------------------------------------------------
+
+Clock      Waveform(ns)       Period(ns)      Frequency(MHz)
+-----      ------------       ----------      --------------
+CLK100MHZ  {0.000 6.000}      12.000          83.333          
+
+
+------------------------------------------------------------------------------------------------
+| Intra Clock Table
+| -----------------
+------------------------------------------------------------------------------------------------
+
+Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+-----             -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+CLK100MHZ           0.671        0.000                      0                  558        5.500        0.000                       0                   273  
+
+
+------------------------------------------------------------------------------------------------
+| Inter Clock Table
+| -----------------
+------------------------------------------------------------------------------------------------
+
+From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+----------    --------          -------      -------  ---------------------  -------------------  
+
+
+------------------------------------------------------------------------------------------------
+| Other Path Groups Table
+| -----------------------
+------------------------------------------------------------------------------------------------
+
+Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints  
+----------    ----------    --------          -------      -------  ---------------------  -------------------  
+
+
+------------------------------------------------------------------------------------------------
+| Timing Details
+| --------------
+------------------------------------------------------------------------------------------------
+
+
+---------------------------------------------------------------------------------------------------
+From Clock:  CLK100MHZ
+  To Clock:  CLK100MHZ
+
+Setup :            0  Failing Endpoints,  Worst Slack        0.671ns,  Total Violation        0.000ns
+Hold  :           NA  Failing Endpoints,  Worst Slack           NA  ,  Total Violation           NA
+PW    :            0  Failing Endpoints,  Worst Slack        5.500ns,  Total Violation        0.000ns
+---------------------------------------------------------------------------------------------------
+
+
+Max Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             0.671ns  (required time - arrival time)
+  Source:                 matmul_i/cycle_count_reg[2]/C
+                            (rising edge-triggered cell FDCE clocked by CLK100MHZ  {rise@0.000ns fall@6.000ns period=12.000ns})
+  Destination:            matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[61]/D
+                            (rising edge-triggered cell FDCE clocked by CLK100MHZ  {rise@0.000ns fall@6.000ns period=12.000ns})
+  Path Group:             CLK100MHZ
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            12.000ns  (CLK100MHZ rise@12.000ns - CLK100MHZ rise@0.000ns)
+  Data Path Delay:        11.225ns  (logic 7.563ns (67.378%)  route 3.662ns (32.622%))
+  Logic Levels:           21  (CARRY4=16 DSP48E1=1 LUT2=1 LUT4=1 LUT5=1 LUT6=1)
+  Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.704ns = ( 14.704 - 12.000 ) 
+    Source Clock Delay      (SCD):    2.965ns
+    Clock Pessimism Removal (CPR):    0.116ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock CLK100MHZ rise edge)
+                                                      0.000     0.000 r  
+    E3                                                0.000     0.000 r  CLK100MHZ (IN)
+                         net (fo=0)                   0.000     0.000    CLK100MHZ
+    E3                   IBUF (Prop_ibuf_I_O)         1.482     1.482 r  CLK100MHZ_IBUF_inst/O
+                         net (fo=1, unplaced)         0.803     2.285    CLK100MHZ_IBUF
+                         BUFG (Prop_bufg_I_O)         0.096     2.381 r  CLK100MHZ_IBUF_BUFG_inst/O
+                         net (fo=272, unplaced)       0.584     2.965    matmul_i/CLK100MHZ_IBUF_BUFG
+                         FDCE                                         r  matmul_i/cycle_count_reg[2]/C
+  -------------------------------------------------------------------    -------------------
+                         FDCE (Prop_fdce_C_Q)         0.478     3.443 f  matmul_i/cycle_count_reg[2]/Q
+                         net (fo=9, unplaced)         0.804     4.247    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_1[2]
+                         LUT4 (Prop_lut4_I1_O)        0.295     4.542 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_67/O
+                         net (fo=32, unplaced)        0.803     5.345    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_67_n_0
+                         LUT6 (Prop_lut6_I0_O)        0.124     5.469 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_51/O
+                         net (fo=1, unplaced)         0.449     5.918    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_51_n_0
+                         LUT5 (Prop_lut5_I0_O)        0.124     6.042 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_17/O
+                         net (fo=15, unplaced)        0.803     6.845    matmul_i/gen_row[0].gen_col[0].pe_i/a_bus[0][0]_1[15]
+                         DSP48E1 (Prop_dsp48e1_A[29]_P[0])
+                                                      3.841    10.686 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result/P[0]
+                         net (fo=2, unplaced)         0.803    11.488    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result__0[0]
+                         LUT2 (Prop_lut2_I0_O)        0.150    11.638 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out[0]_i_6/O
+                         net (fo=1, unplaced)         0.000    11.638    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out[0]_i_6_n_0
+                         CARRY4 (Prop_carry4_DI[0]_CO[3])
+                                                      0.576    12.214 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[0]_i_2/CO[3]
+                         net (fo=1, unplaced)         0.000    12.214    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[0]_i_2_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.331 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[4]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.331    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[4]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.448 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[8]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.448    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[8]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.565 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[12]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.565    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[12]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.682 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[16]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.682    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[16]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.799 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[20]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.799    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[20]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.916 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[24]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.916    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[24]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.033 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[28]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.033    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[28]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.150 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[32]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.150    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[32]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.267 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[36]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.267    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[36]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.384 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[40]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.384    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[40]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.501 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[44]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.501    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[44]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.618 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[48]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.618    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[48]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.735 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[52]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.735    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[52]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.852 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[56]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.852    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[56]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.337    14.189 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[60]_i_1/O[1]
+                         net (fo=1, unplaced)         0.000    14.189    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[60]_i_1_n_6
+                         FDCE                                         r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[61]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock CLK100MHZ rise edge)
+                                                     12.000    12.000 r  
+    E3                                                0.000    12.000 r  CLK100MHZ (IN)
+                         net (fo=0)                   0.000    12.000    CLK100MHZ
+    E3                   IBUF (Prop_ibuf_I_O)         1.411    13.411 r  CLK100MHZ_IBUF_inst/O
+                         net (fo=1, unplaced)         0.763    14.174    CLK100MHZ_IBUF
+                         BUFG (Prop_bufg_I_O)         0.091    14.265 r  CLK100MHZ_IBUF_BUFG_inst/O
+                         net (fo=272, unplaced)       0.439    14.704    matmul_i/gen_row[0].gen_col[0].pe_i/CLK100MHZ_IBUF_BUFG
+                         FDCE                                         r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[61]/C
+                         clock pessimism              0.116    14.820    
+                         clock uncertainty           -0.035    14.784    
+                         FDCE (Setup_fdce_C_D)        0.076    14.860    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[61]
+  -------------------------------------------------------------------
+                         required time                         14.860    
+                         arrival time                         -14.189    
+  -------------------------------------------------------------------
+                         slack                                  0.671    
+
+Slack (MET) :             0.677ns  (required time - arrival time)
+  Source:                 matmul_i/cycle_count_reg[2]/C
+                            (rising edge-triggered cell FDCE clocked by CLK100MHZ  {rise@0.000ns fall@6.000ns period=12.000ns})
+  Destination:            matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[63]/D
+                            (rising edge-triggered cell FDCE clocked by CLK100MHZ  {rise@0.000ns fall@6.000ns period=12.000ns})
+  Path Group:             CLK100MHZ
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            12.000ns  (CLK100MHZ rise@12.000ns - CLK100MHZ rise@0.000ns)
+  Data Path Delay:        11.219ns  (logic 7.557ns (67.361%)  route 3.662ns (32.639%))
+  Logic Levels:           21  (CARRY4=16 DSP48E1=1 LUT2=1 LUT4=1 LUT5=1 LUT6=1)
+  Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.704ns = ( 14.704 - 12.000 ) 
+    Source Clock Delay      (SCD):    2.965ns
+    Clock Pessimism Removal (CPR):    0.116ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock CLK100MHZ rise edge)
+                                                      0.000     0.000 r  
+    E3                                                0.000     0.000 r  CLK100MHZ (IN)
+                         net (fo=0)                   0.000     0.000    CLK100MHZ
+    E3                   IBUF (Prop_ibuf_I_O)         1.482     1.482 r  CLK100MHZ_IBUF_inst/O
+                         net (fo=1, unplaced)         0.803     2.285    CLK100MHZ_IBUF
+                         BUFG (Prop_bufg_I_O)         0.096     2.381 r  CLK100MHZ_IBUF_BUFG_inst/O
+                         net (fo=272, unplaced)       0.584     2.965    matmul_i/CLK100MHZ_IBUF_BUFG
+                         FDCE                                         r  matmul_i/cycle_count_reg[2]/C
+  -------------------------------------------------------------------    -------------------
+                         FDCE (Prop_fdce_C_Q)         0.478     3.443 f  matmul_i/cycle_count_reg[2]/Q
+                         net (fo=9, unplaced)         0.804     4.247    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_1[2]
+                         LUT4 (Prop_lut4_I1_O)        0.295     4.542 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_67/O
+                         net (fo=32, unplaced)        0.803     5.345    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_67_n_0
+                         LUT6 (Prop_lut6_I0_O)        0.124     5.469 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_51/O
+                         net (fo=1, unplaced)         0.449     5.918    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_51_n_0
+                         LUT5 (Prop_lut5_I0_O)        0.124     6.042 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_17/O
+                         net (fo=15, unplaced)        0.803     6.845    matmul_i/gen_row[0].gen_col[0].pe_i/a_bus[0][0]_1[15]
+                         DSP48E1 (Prop_dsp48e1_A[29]_P[0])
+                                                      3.841    10.686 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result/P[0]
+                         net (fo=2, unplaced)         0.803    11.488    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result__0[0]
+                         LUT2 (Prop_lut2_I0_O)        0.150    11.638 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out[0]_i_6/O
+                         net (fo=1, unplaced)         0.000    11.638    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out[0]_i_6_n_0
+                         CARRY4 (Prop_carry4_DI[0]_CO[3])
+                                                      0.576    12.214 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[0]_i_2/CO[3]
+                         net (fo=1, unplaced)         0.000    12.214    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[0]_i_2_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.331 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[4]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.331    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[4]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.448 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[8]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.448    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[8]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.565 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[12]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.565    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[12]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.682 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[16]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.682    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[16]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.799 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[20]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.799    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[20]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.916 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[24]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.916    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[24]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.033 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[28]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.033    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[28]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.150 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[32]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.150    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[32]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.267 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[36]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.267    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[36]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.384 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[40]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.384    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[40]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.501 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[44]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.501    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[44]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.618 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[48]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.618    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[48]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.735 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[52]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.735    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[52]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.852 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[56]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.852    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[56]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.331    14.183 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[60]_i_1/O[3]
+                         net (fo=1, unplaced)         0.000    14.183    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[60]_i_1_n_4
+                         FDCE                                         r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[63]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock CLK100MHZ rise edge)
+                                                     12.000    12.000 r  
+    E3                                                0.000    12.000 r  CLK100MHZ (IN)
+                         net (fo=0)                   0.000    12.000    CLK100MHZ
+    E3                   IBUF (Prop_ibuf_I_O)         1.411    13.411 r  CLK100MHZ_IBUF_inst/O
+                         net (fo=1, unplaced)         0.763    14.174    CLK100MHZ_IBUF
+                         BUFG (Prop_bufg_I_O)         0.091    14.265 r  CLK100MHZ_IBUF_BUFG_inst/O
+                         net (fo=272, unplaced)       0.439    14.704    matmul_i/gen_row[0].gen_col[0].pe_i/CLK100MHZ_IBUF_BUFG
+                         FDCE                                         r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[63]/C
+                         clock pessimism              0.116    14.820    
+                         clock uncertainty           -0.035    14.784    
+                         FDCE (Setup_fdce_C_D)        0.076    14.860    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[63]
+  -------------------------------------------------------------------
+                         required time                         14.860    
+                         arrival time                         -14.183    
+  -------------------------------------------------------------------
+                         slack                                  0.677    
+
+Slack (MET) :             0.752ns  (required time - arrival time)
+  Source:                 matmul_i/cycle_count_reg[2]/C
+                            (rising edge-triggered cell FDCE clocked by CLK100MHZ  {rise@0.000ns fall@6.000ns period=12.000ns})
+  Destination:            matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[62]/D
+                            (rising edge-triggered cell FDCE clocked by CLK100MHZ  {rise@0.000ns fall@6.000ns period=12.000ns})
+  Path Group:             CLK100MHZ
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            12.000ns  (CLK100MHZ rise@12.000ns - CLK100MHZ rise@0.000ns)
+  Data Path Delay:        11.144ns  (logic 7.482ns (67.141%)  route 3.662ns (32.859%))
+  Logic Levels:           21  (CARRY4=16 DSP48E1=1 LUT2=1 LUT4=1 LUT5=1 LUT6=1)
+  Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.704ns = ( 14.704 - 12.000 ) 
+    Source Clock Delay      (SCD):    2.965ns
+    Clock Pessimism Removal (CPR):    0.116ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock CLK100MHZ rise edge)
+                                                      0.000     0.000 r  
+    E3                                                0.000     0.000 r  CLK100MHZ (IN)
+                         net (fo=0)                   0.000     0.000    CLK100MHZ
+    E3                   IBUF (Prop_ibuf_I_O)         1.482     1.482 r  CLK100MHZ_IBUF_inst/O
+                         net (fo=1, unplaced)         0.803     2.285    CLK100MHZ_IBUF
+                         BUFG (Prop_bufg_I_O)         0.096     2.381 r  CLK100MHZ_IBUF_BUFG_inst/O
+                         net (fo=272, unplaced)       0.584     2.965    matmul_i/CLK100MHZ_IBUF_BUFG
+                         FDCE                                         r  matmul_i/cycle_count_reg[2]/C
+  -------------------------------------------------------------------    -------------------
+                         FDCE (Prop_fdce_C_Q)         0.478     3.443 f  matmul_i/cycle_count_reg[2]/Q
+                         net (fo=9, unplaced)         0.804     4.247    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_1[2]
+                         LUT4 (Prop_lut4_I1_O)        0.295     4.542 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_67/O
+                         net (fo=32, unplaced)        0.803     5.345    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_67_n_0
+                         LUT6 (Prop_lut6_I0_O)        0.124     5.469 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_51/O
+                         net (fo=1, unplaced)         0.449     5.918    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_51_n_0
+                         LUT5 (Prop_lut5_I0_O)        0.124     6.042 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_17/O
+                         net (fo=15, unplaced)        0.803     6.845    matmul_i/gen_row[0].gen_col[0].pe_i/a_bus[0][0]_1[15]
+                         DSP48E1 (Prop_dsp48e1_A[29]_P[0])
+                                                      3.841    10.686 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result/P[0]
+                         net (fo=2, unplaced)         0.803    11.488    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result__0[0]
+                         LUT2 (Prop_lut2_I0_O)        0.150    11.638 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out[0]_i_6/O
+                         net (fo=1, unplaced)         0.000    11.638    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out[0]_i_6_n_0
+                         CARRY4 (Prop_carry4_DI[0]_CO[3])
+                                                      0.576    12.214 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[0]_i_2/CO[3]
+                         net (fo=1, unplaced)         0.000    12.214    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[0]_i_2_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.331 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[4]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.331    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[4]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.448 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[8]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.448    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[8]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.565 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[12]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.565    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[12]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.682 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[16]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.682    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[16]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.799 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[20]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.799    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[20]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.916 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[24]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.916    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[24]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.033 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[28]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.033    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[28]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.150 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[32]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.150    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[32]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.267 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[36]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.267    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[36]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.384 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[40]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.384    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[40]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.501 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[44]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.501    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[44]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.618 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[48]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.618    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[48]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.735 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[52]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.735    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[52]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.852 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[56]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.852    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[56]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_O[2])
+                                                      0.256    14.108 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[60]_i_1/O[2]
+                         net (fo=1, unplaced)         0.000    14.108    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[60]_i_1_n_5
+                         FDCE                                         r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[62]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock CLK100MHZ rise edge)
+                                                     12.000    12.000 r  
+    E3                                                0.000    12.000 r  CLK100MHZ (IN)
+                         net (fo=0)                   0.000    12.000    CLK100MHZ
+    E3                   IBUF (Prop_ibuf_I_O)         1.411    13.411 r  CLK100MHZ_IBUF_inst/O
+                         net (fo=1, unplaced)         0.763    14.174    CLK100MHZ_IBUF
+                         BUFG (Prop_bufg_I_O)         0.091    14.265 r  CLK100MHZ_IBUF_BUFG_inst/O
+                         net (fo=272, unplaced)       0.439    14.704    matmul_i/gen_row[0].gen_col[0].pe_i/CLK100MHZ_IBUF_BUFG
+                         FDCE                                         r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[62]/C
+                         clock pessimism              0.116    14.820    
+                         clock uncertainty           -0.035    14.784    
+                         FDCE (Setup_fdce_C_D)        0.076    14.860    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[62]
+  -------------------------------------------------------------------
+                         required time                         14.860    
+                         arrival time                         -14.108    
+  -------------------------------------------------------------------
+                         slack                                  0.752    
+
+Slack (MET) :             0.776ns  (required time - arrival time)
+  Source:                 matmul_i/cycle_count_reg[2]/C
+                            (rising edge-triggered cell FDCE clocked by CLK100MHZ  {rise@0.000ns fall@6.000ns period=12.000ns})
+  Destination:            matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[60]/D
+                            (rising edge-triggered cell FDCE clocked by CLK100MHZ  {rise@0.000ns fall@6.000ns period=12.000ns})
+  Path Group:             CLK100MHZ
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            12.000ns  (CLK100MHZ rise@12.000ns - CLK100MHZ rise@0.000ns)
+  Data Path Delay:        11.120ns  (logic 7.458ns (67.070%)  route 3.662ns (32.930%))
+  Logic Levels:           21  (CARRY4=16 DSP48E1=1 LUT2=1 LUT4=1 LUT5=1 LUT6=1)
+  Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.704ns = ( 14.704 - 12.000 ) 
+    Source Clock Delay      (SCD):    2.965ns
+    Clock Pessimism Removal (CPR):    0.116ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock CLK100MHZ rise edge)
+                                                      0.000     0.000 r  
+    E3                                                0.000     0.000 r  CLK100MHZ (IN)
+                         net (fo=0)                   0.000     0.000    CLK100MHZ
+    E3                   IBUF (Prop_ibuf_I_O)         1.482     1.482 r  CLK100MHZ_IBUF_inst/O
+                         net (fo=1, unplaced)         0.803     2.285    CLK100MHZ_IBUF
+                         BUFG (Prop_bufg_I_O)         0.096     2.381 r  CLK100MHZ_IBUF_BUFG_inst/O
+                         net (fo=272, unplaced)       0.584     2.965    matmul_i/CLK100MHZ_IBUF_BUFG
+                         FDCE                                         r  matmul_i/cycle_count_reg[2]/C
+  -------------------------------------------------------------------    -------------------
+                         FDCE (Prop_fdce_C_Q)         0.478     3.443 f  matmul_i/cycle_count_reg[2]/Q
+                         net (fo=9, unplaced)         0.804     4.247    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_1[2]
+                         LUT4 (Prop_lut4_I1_O)        0.295     4.542 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_67/O
+                         net (fo=32, unplaced)        0.803     5.345    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_67_n_0
+                         LUT6 (Prop_lut6_I0_O)        0.124     5.469 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_51/O
+                         net (fo=1, unplaced)         0.449     5.918    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_51_n_0
+                         LUT5 (Prop_lut5_I0_O)        0.124     6.042 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_17/O
+                         net (fo=15, unplaced)        0.803     6.845    matmul_i/gen_row[0].gen_col[0].pe_i/a_bus[0][0]_1[15]
+                         DSP48E1 (Prop_dsp48e1_A[29]_P[0])
+                                                      3.841    10.686 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result/P[0]
+                         net (fo=2, unplaced)         0.803    11.488    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result__0[0]
+                         LUT2 (Prop_lut2_I0_O)        0.150    11.638 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out[0]_i_6/O
+                         net (fo=1, unplaced)         0.000    11.638    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out[0]_i_6_n_0
+                         CARRY4 (Prop_carry4_DI[0]_CO[3])
+                                                      0.576    12.214 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[0]_i_2/CO[3]
+                         net (fo=1, unplaced)         0.000    12.214    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[0]_i_2_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.331 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[4]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.331    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[4]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.448 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[8]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.448    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[8]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.565 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[12]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.565    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[12]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.682 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[16]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.682    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[16]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.799 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[20]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.799    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[20]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.916 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[24]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.916    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[24]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.033 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[28]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.033    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[28]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.150 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[32]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.150    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[32]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.267 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[36]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.267    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[36]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.384 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[40]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.384    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[40]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.501 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[44]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.501    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[44]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.618 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[48]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.618    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[48]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.735 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[52]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.735    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[52]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.852 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[56]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.852    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[56]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.232    14.084 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[60]_i_1/O[0]
+                         net (fo=1, unplaced)         0.000    14.084    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[60]_i_1_n_7
+                         FDCE                                         r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[60]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock CLK100MHZ rise edge)
+                                                     12.000    12.000 r  
+    E3                                                0.000    12.000 r  CLK100MHZ (IN)
+                         net (fo=0)                   0.000    12.000    CLK100MHZ
+    E3                   IBUF (Prop_ibuf_I_O)         1.411    13.411 r  CLK100MHZ_IBUF_inst/O
+                         net (fo=1, unplaced)         0.763    14.174    CLK100MHZ_IBUF
+                         BUFG (Prop_bufg_I_O)         0.091    14.265 r  CLK100MHZ_IBUF_BUFG_inst/O
+                         net (fo=272, unplaced)       0.439    14.704    matmul_i/gen_row[0].gen_col[0].pe_i/CLK100MHZ_IBUF_BUFG
+                         FDCE                                         r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[60]/C
+                         clock pessimism              0.116    14.820    
+                         clock uncertainty           -0.035    14.784    
+                         FDCE (Setup_fdce_C_D)        0.076    14.860    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[60]
+  -------------------------------------------------------------------
+                         required time                         14.860    
+                         arrival time                         -14.084    
+  -------------------------------------------------------------------
+                         slack                                  0.776    
+
+Slack (MET) :             0.788ns  (required time - arrival time)
+  Source:                 matmul_i/cycle_count_reg[2]/C
+                            (rising edge-triggered cell FDCE clocked by CLK100MHZ  {rise@0.000ns fall@6.000ns period=12.000ns})
+  Destination:            matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[57]/D
+                            (rising edge-triggered cell FDCE clocked by CLK100MHZ  {rise@0.000ns fall@6.000ns period=12.000ns})
+  Path Group:             CLK100MHZ
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            12.000ns  (CLK100MHZ rise@12.000ns - CLK100MHZ rise@0.000ns)
+  Data Path Delay:        11.108ns  (logic 7.446ns (67.035%)  route 3.662ns (32.966%))
+  Logic Levels:           20  (CARRY4=15 DSP48E1=1 LUT2=1 LUT4=1 LUT5=1 LUT6=1)
+  Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.704ns = ( 14.704 - 12.000 ) 
+    Source Clock Delay      (SCD):    2.965ns
+    Clock Pessimism Removal (CPR):    0.116ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock CLK100MHZ rise edge)
+                                                      0.000     0.000 r  
+    E3                                                0.000     0.000 r  CLK100MHZ (IN)
+                         net (fo=0)                   0.000     0.000    CLK100MHZ
+    E3                   IBUF (Prop_ibuf_I_O)         1.482     1.482 r  CLK100MHZ_IBUF_inst/O
+                         net (fo=1, unplaced)         0.803     2.285    CLK100MHZ_IBUF
+                         BUFG (Prop_bufg_I_O)         0.096     2.381 r  CLK100MHZ_IBUF_BUFG_inst/O
+                         net (fo=272, unplaced)       0.584     2.965    matmul_i/CLK100MHZ_IBUF_BUFG
+                         FDCE                                         r  matmul_i/cycle_count_reg[2]/C
+  -------------------------------------------------------------------    -------------------
+                         FDCE (Prop_fdce_C_Q)         0.478     3.443 f  matmul_i/cycle_count_reg[2]/Q
+                         net (fo=9, unplaced)         0.804     4.247    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_1[2]
+                         LUT4 (Prop_lut4_I1_O)        0.295     4.542 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_67/O
+                         net (fo=32, unplaced)        0.803     5.345    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_67_n_0
+                         LUT6 (Prop_lut6_I0_O)        0.124     5.469 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_51/O
+                         net (fo=1, unplaced)         0.449     5.918    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_51_n_0
+                         LUT5 (Prop_lut5_I0_O)        0.124     6.042 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_17/O
+                         net (fo=15, unplaced)        0.803     6.845    matmul_i/gen_row[0].gen_col[0].pe_i/a_bus[0][0]_1[15]
+                         DSP48E1 (Prop_dsp48e1_A[29]_P[0])
+                                                      3.841    10.686 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result/P[0]
+                         net (fo=2, unplaced)         0.803    11.488    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result__0[0]
+                         LUT2 (Prop_lut2_I0_O)        0.150    11.638 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out[0]_i_6/O
+                         net (fo=1, unplaced)         0.000    11.638    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out[0]_i_6_n_0
+                         CARRY4 (Prop_carry4_DI[0]_CO[3])
+                                                      0.576    12.214 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[0]_i_2/CO[3]
+                         net (fo=1, unplaced)         0.000    12.214    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[0]_i_2_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.331 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[4]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.331    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[4]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.448 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[8]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.448    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[8]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.565 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[12]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.565    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[12]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.682 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[16]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.682    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[16]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.799 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[20]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.799    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[20]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.916 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[24]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.916    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[24]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.033 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[28]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.033    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[28]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.150 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[32]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.150    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[32]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.267 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[36]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.267    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[36]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.384 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[40]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.384    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[40]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.501 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[44]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.501    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[44]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.618 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[48]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.618    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[48]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.735 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[52]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.735    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[52]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.337    14.072 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[56]_i_1/O[1]
+                         net (fo=1, unplaced)         0.000    14.072    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[56]_i_1_n_6
+                         FDCE                                         r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[57]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock CLK100MHZ rise edge)
+                                                     12.000    12.000 r  
+    E3                                                0.000    12.000 r  CLK100MHZ (IN)
+                         net (fo=0)                   0.000    12.000    CLK100MHZ
+    E3                   IBUF (Prop_ibuf_I_O)         1.411    13.411 r  CLK100MHZ_IBUF_inst/O
+                         net (fo=1, unplaced)         0.763    14.174    CLK100MHZ_IBUF
+                         BUFG (Prop_bufg_I_O)         0.091    14.265 r  CLK100MHZ_IBUF_BUFG_inst/O
+                         net (fo=272, unplaced)       0.439    14.704    matmul_i/gen_row[0].gen_col[0].pe_i/CLK100MHZ_IBUF_BUFG
+                         FDCE                                         r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[57]/C
+                         clock pessimism              0.116    14.820    
+                         clock uncertainty           -0.035    14.784    
+                         FDCE (Setup_fdce_C_D)        0.076    14.860    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[57]
+  -------------------------------------------------------------------
+                         required time                         14.860    
+                         arrival time                         -14.072    
+  -------------------------------------------------------------------
+                         slack                                  0.788    
+
+Slack (MET) :             0.794ns  (required time - arrival time)
+  Source:                 matmul_i/cycle_count_reg[2]/C
+                            (rising edge-triggered cell FDCE clocked by CLK100MHZ  {rise@0.000ns fall@6.000ns period=12.000ns})
+  Destination:            matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[59]/D
+                            (rising edge-triggered cell FDCE clocked by CLK100MHZ  {rise@0.000ns fall@6.000ns period=12.000ns})
+  Path Group:             CLK100MHZ
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            12.000ns  (CLK100MHZ rise@12.000ns - CLK100MHZ rise@0.000ns)
+  Data Path Delay:        11.102ns  (logic 7.440ns (67.017%)  route 3.662ns (32.983%))
+  Logic Levels:           20  (CARRY4=15 DSP48E1=1 LUT2=1 LUT4=1 LUT5=1 LUT6=1)
+  Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.704ns = ( 14.704 - 12.000 ) 
+    Source Clock Delay      (SCD):    2.965ns
+    Clock Pessimism Removal (CPR):    0.116ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock CLK100MHZ rise edge)
+                                                      0.000     0.000 r  
+    E3                                                0.000     0.000 r  CLK100MHZ (IN)
+                         net (fo=0)                   0.000     0.000    CLK100MHZ
+    E3                   IBUF (Prop_ibuf_I_O)         1.482     1.482 r  CLK100MHZ_IBUF_inst/O
+                         net (fo=1, unplaced)         0.803     2.285    CLK100MHZ_IBUF
+                         BUFG (Prop_bufg_I_O)         0.096     2.381 r  CLK100MHZ_IBUF_BUFG_inst/O
+                         net (fo=272, unplaced)       0.584     2.965    matmul_i/CLK100MHZ_IBUF_BUFG
+                         FDCE                                         r  matmul_i/cycle_count_reg[2]/C
+  -------------------------------------------------------------------    -------------------
+                         FDCE (Prop_fdce_C_Q)         0.478     3.443 f  matmul_i/cycle_count_reg[2]/Q
+                         net (fo=9, unplaced)         0.804     4.247    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_1[2]
+                         LUT4 (Prop_lut4_I1_O)        0.295     4.542 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_67/O
+                         net (fo=32, unplaced)        0.803     5.345    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_67_n_0
+                         LUT6 (Prop_lut6_I0_O)        0.124     5.469 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_51/O
+                         net (fo=1, unplaced)         0.449     5.918    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_51_n_0
+                         LUT5 (Prop_lut5_I0_O)        0.124     6.042 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_17/O
+                         net (fo=15, unplaced)        0.803     6.845    matmul_i/gen_row[0].gen_col[0].pe_i/a_bus[0][0]_1[15]
+                         DSP48E1 (Prop_dsp48e1_A[29]_P[0])
+                                                      3.841    10.686 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result/P[0]
+                         net (fo=2, unplaced)         0.803    11.488    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result__0[0]
+                         LUT2 (Prop_lut2_I0_O)        0.150    11.638 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out[0]_i_6/O
+                         net (fo=1, unplaced)         0.000    11.638    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out[0]_i_6_n_0
+                         CARRY4 (Prop_carry4_DI[0]_CO[3])
+                                                      0.576    12.214 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[0]_i_2/CO[3]
+                         net (fo=1, unplaced)         0.000    12.214    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[0]_i_2_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.331 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[4]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.331    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[4]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.448 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[8]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.448    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[8]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.565 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[12]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.565    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[12]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.682 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[16]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.682    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[16]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.799 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[20]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.799    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[20]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.916 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[24]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.916    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[24]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.033 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[28]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.033    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[28]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.150 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[32]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.150    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[32]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.267 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[36]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.267    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[36]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.384 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[40]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.384    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[40]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.501 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[44]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.501    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[44]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.618 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[48]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.618    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[48]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.735 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[52]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.735    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[52]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.331    14.066 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[56]_i_1/O[3]
+                         net (fo=1, unplaced)         0.000    14.066    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[56]_i_1_n_4
+                         FDCE                                         r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[59]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock CLK100MHZ rise edge)
+                                                     12.000    12.000 r  
+    E3                                                0.000    12.000 r  CLK100MHZ (IN)
+                         net (fo=0)                   0.000    12.000    CLK100MHZ
+    E3                   IBUF (Prop_ibuf_I_O)         1.411    13.411 r  CLK100MHZ_IBUF_inst/O
+                         net (fo=1, unplaced)         0.763    14.174    CLK100MHZ_IBUF
+                         BUFG (Prop_bufg_I_O)         0.091    14.265 r  CLK100MHZ_IBUF_BUFG_inst/O
+                         net (fo=272, unplaced)       0.439    14.704    matmul_i/gen_row[0].gen_col[0].pe_i/CLK100MHZ_IBUF_BUFG
+                         FDCE                                         r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[59]/C
+                         clock pessimism              0.116    14.820    
+                         clock uncertainty           -0.035    14.784    
+                         FDCE (Setup_fdce_C_D)        0.076    14.860    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[59]
+  -------------------------------------------------------------------
+                         required time                         14.860    
+                         arrival time                         -14.066    
+  -------------------------------------------------------------------
+                         slack                                  0.794    
+
+Slack (MET) :             0.869ns  (required time - arrival time)
+  Source:                 matmul_i/cycle_count_reg[2]/C
+                            (rising edge-triggered cell FDCE clocked by CLK100MHZ  {rise@0.000ns fall@6.000ns period=12.000ns})
+  Destination:            matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[58]/D
+                            (rising edge-triggered cell FDCE clocked by CLK100MHZ  {rise@0.000ns fall@6.000ns period=12.000ns})
+  Path Group:             CLK100MHZ
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            12.000ns  (CLK100MHZ rise@12.000ns - CLK100MHZ rise@0.000ns)
+  Data Path Delay:        11.027ns  (logic 7.365ns (66.792%)  route 3.662ns (33.208%))
+  Logic Levels:           20  (CARRY4=15 DSP48E1=1 LUT2=1 LUT4=1 LUT5=1 LUT6=1)
+  Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.704ns = ( 14.704 - 12.000 ) 
+    Source Clock Delay      (SCD):    2.965ns
+    Clock Pessimism Removal (CPR):    0.116ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock CLK100MHZ rise edge)
+                                                      0.000     0.000 r  
+    E3                                                0.000     0.000 r  CLK100MHZ (IN)
+                         net (fo=0)                   0.000     0.000    CLK100MHZ
+    E3                   IBUF (Prop_ibuf_I_O)         1.482     1.482 r  CLK100MHZ_IBUF_inst/O
+                         net (fo=1, unplaced)         0.803     2.285    CLK100MHZ_IBUF
+                         BUFG (Prop_bufg_I_O)         0.096     2.381 r  CLK100MHZ_IBUF_BUFG_inst/O
+                         net (fo=272, unplaced)       0.584     2.965    matmul_i/CLK100MHZ_IBUF_BUFG
+                         FDCE                                         r  matmul_i/cycle_count_reg[2]/C
+  -------------------------------------------------------------------    -------------------
+                         FDCE (Prop_fdce_C_Q)         0.478     3.443 f  matmul_i/cycle_count_reg[2]/Q
+                         net (fo=9, unplaced)         0.804     4.247    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_1[2]
+                         LUT4 (Prop_lut4_I1_O)        0.295     4.542 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_67/O
+                         net (fo=32, unplaced)        0.803     5.345    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_67_n_0
+                         LUT6 (Prop_lut6_I0_O)        0.124     5.469 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_51/O
+                         net (fo=1, unplaced)         0.449     5.918    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_51_n_0
+                         LUT5 (Prop_lut5_I0_O)        0.124     6.042 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_17/O
+                         net (fo=15, unplaced)        0.803     6.845    matmul_i/gen_row[0].gen_col[0].pe_i/a_bus[0][0]_1[15]
+                         DSP48E1 (Prop_dsp48e1_A[29]_P[0])
+                                                      3.841    10.686 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result/P[0]
+                         net (fo=2, unplaced)         0.803    11.488    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result__0[0]
+                         LUT2 (Prop_lut2_I0_O)        0.150    11.638 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out[0]_i_6/O
+                         net (fo=1, unplaced)         0.000    11.638    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out[0]_i_6_n_0
+                         CARRY4 (Prop_carry4_DI[0]_CO[3])
+                                                      0.576    12.214 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[0]_i_2/CO[3]
+                         net (fo=1, unplaced)         0.000    12.214    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[0]_i_2_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.331 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[4]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.331    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[4]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.448 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[8]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.448    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[8]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.565 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[12]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.565    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[12]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.682 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[16]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.682    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[16]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.799 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[20]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.799    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[20]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.916 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[24]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.916    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[24]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.033 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[28]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.033    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[28]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.150 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[32]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.150    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[32]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.267 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[36]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.267    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[36]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.384 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[40]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.384    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[40]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.501 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[44]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.501    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[44]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.618 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[48]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.618    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[48]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.735 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[52]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.735    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[52]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_O[2])
+                                                      0.256    13.991 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[56]_i_1/O[2]
+                         net (fo=1, unplaced)         0.000    13.991    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[56]_i_1_n_5
+                         FDCE                                         r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[58]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock CLK100MHZ rise edge)
+                                                     12.000    12.000 r  
+    E3                                                0.000    12.000 r  CLK100MHZ (IN)
+                         net (fo=0)                   0.000    12.000    CLK100MHZ
+    E3                   IBUF (Prop_ibuf_I_O)         1.411    13.411 r  CLK100MHZ_IBUF_inst/O
+                         net (fo=1, unplaced)         0.763    14.174    CLK100MHZ_IBUF
+                         BUFG (Prop_bufg_I_O)         0.091    14.265 r  CLK100MHZ_IBUF_BUFG_inst/O
+                         net (fo=272, unplaced)       0.439    14.704    matmul_i/gen_row[0].gen_col[0].pe_i/CLK100MHZ_IBUF_BUFG
+                         FDCE                                         r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[58]/C
+                         clock pessimism              0.116    14.820    
+                         clock uncertainty           -0.035    14.784    
+                         FDCE (Setup_fdce_C_D)        0.076    14.860    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[58]
+  -------------------------------------------------------------------
+                         required time                         14.860    
+                         arrival time                         -13.991    
+  -------------------------------------------------------------------
+                         slack                                  0.869    
+
+Slack (MET) :             0.893ns  (required time - arrival time)
+  Source:                 matmul_i/cycle_count_reg[2]/C
+                            (rising edge-triggered cell FDCE clocked by CLK100MHZ  {rise@0.000ns fall@6.000ns period=12.000ns})
+  Destination:            matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[56]/D
+                            (rising edge-triggered cell FDCE clocked by CLK100MHZ  {rise@0.000ns fall@6.000ns period=12.000ns})
+  Path Group:             CLK100MHZ
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            12.000ns  (CLK100MHZ rise@12.000ns - CLK100MHZ rise@0.000ns)
+  Data Path Delay:        11.003ns  (logic 7.341ns (66.720%)  route 3.662ns (33.280%))
+  Logic Levels:           20  (CARRY4=15 DSP48E1=1 LUT2=1 LUT4=1 LUT5=1 LUT6=1)
+  Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.704ns = ( 14.704 - 12.000 ) 
+    Source Clock Delay      (SCD):    2.965ns
+    Clock Pessimism Removal (CPR):    0.116ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock CLK100MHZ rise edge)
+                                                      0.000     0.000 r  
+    E3                                                0.000     0.000 r  CLK100MHZ (IN)
+                         net (fo=0)                   0.000     0.000    CLK100MHZ
+    E3                   IBUF (Prop_ibuf_I_O)         1.482     1.482 r  CLK100MHZ_IBUF_inst/O
+                         net (fo=1, unplaced)         0.803     2.285    CLK100MHZ_IBUF
+                         BUFG (Prop_bufg_I_O)         0.096     2.381 r  CLK100MHZ_IBUF_BUFG_inst/O
+                         net (fo=272, unplaced)       0.584     2.965    matmul_i/CLK100MHZ_IBUF_BUFG
+                         FDCE                                         r  matmul_i/cycle_count_reg[2]/C
+  -------------------------------------------------------------------    -------------------
+                         FDCE (Prop_fdce_C_Q)         0.478     3.443 f  matmul_i/cycle_count_reg[2]/Q
+                         net (fo=9, unplaced)         0.804     4.247    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_1[2]
+                         LUT4 (Prop_lut4_I1_O)        0.295     4.542 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_67/O
+                         net (fo=32, unplaced)        0.803     5.345    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_67_n_0
+                         LUT6 (Prop_lut6_I0_O)        0.124     5.469 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_51/O
+                         net (fo=1, unplaced)         0.449     5.918    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_51_n_0
+                         LUT5 (Prop_lut5_I0_O)        0.124     6.042 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_17/O
+                         net (fo=15, unplaced)        0.803     6.845    matmul_i/gen_row[0].gen_col[0].pe_i/a_bus[0][0]_1[15]
+                         DSP48E1 (Prop_dsp48e1_A[29]_P[0])
+                                                      3.841    10.686 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result/P[0]
+                         net (fo=2, unplaced)         0.803    11.488    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result__0[0]
+                         LUT2 (Prop_lut2_I0_O)        0.150    11.638 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out[0]_i_6/O
+                         net (fo=1, unplaced)         0.000    11.638    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out[0]_i_6_n_0
+                         CARRY4 (Prop_carry4_DI[0]_CO[3])
+                                                      0.576    12.214 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[0]_i_2/CO[3]
+                         net (fo=1, unplaced)         0.000    12.214    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[0]_i_2_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.331 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[4]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.331    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[4]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.448 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[8]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.448    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[8]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.565 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[12]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.565    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[12]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.682 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[16]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.682    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[16]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.799 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[20]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.799    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[20]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.916 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[24]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.916    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[24]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.033 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[28]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.033    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[28]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.150 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[32]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.150    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[32]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.267 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[36]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.267    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[36]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.384 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[40]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.384    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[40]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.501 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[44]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.501    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[44]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.618 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[48]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.618    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[48]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.735 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[52]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.735    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[52]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_O[0])
+                                                      0.232    13.967 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[56]_i_1/O[0]
+                         net (fo=1, unplaced)         0.000    13.967    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[56]_i_1_n_7
+                         FDCE                                         r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[56]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock CLK100MHZ rise edge)
+                                                     12.000    12.000 r  
+    E3                                                0.000    12.000 r  CLK100MHZ (IN)
+                         net (fo=0)                   0.000    12.000    CLK100MHZ
+    E3                   IBUF (Prop_ibuf_I_O)         1.411    13.411 r  CLK100MHZ_IBUF_inst/O
+                         net (fo=1, unplaced)         0.763    14.174    CLK100MHZ_IBUF
+                         BUFG (Prop_bufg_I_O)         0.091    14.265 r  CLK100MHZ_IBUF_BUFG_inst/O
+                         net (fo=272, unplaced)       0.439    14.704    matmul_i/gen_row[0].gen_col[0].pe_i/CLK100MHZ_IBUF_BUFG
+                         FDCE                                         r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[56]/C
+                         clock pessimism              0.116    14.820    
+                         clock uncertainty           -0.035    14.784    
+                         FDCE (Setup_fdce_C_D)        0.076    14.860    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[56]
+  -------------------------------------------------------------------
+                         required time                         14.860    
+                         arrival time                         -13.967    
+  -------------------------------------------------------------------
+                         slack                                  0.893    
+
+Slack (MET) :             0.905ns  (required time - arrival time)
+  Source:                 matmul_i/cycle_count_reg[2]/C
+                            (rising edge-triggered cell FDCE clocked by CLK100MHZ  {rise@0.000ns fall@6.000ns period=12.000ns})
+  Destination:            matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[53]/D
+                            (rising edge-triggered cell FDCE clocked by CLK100MHZ  {rise@0.000ns fall@6.000ns period=12.000ns})
+  Path Group:             CLK100MHZ
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            12.000ns  (CLK100MHZ rise@12.000ns - CLK100MHZ rise@0.000ns)
+  Data Path Delay:        10.991ns  (logic 7.329ns (66.684%)  route 3.662ns (33.316%))
+  Logic Levels:           19  (CARRY4=14 DSP48E1=1 LUT2=1 LUT4=1 LUT5=1 LUT6=1)
+  Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.704ns = ( 14.704 - 12.000 ) 
+    Source Clock Delay      (SCD):    2.965ns
+    Clock Pessimism Removal (CPR):    0.116ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock CLK100MHZ rise edge)
+                                                      0.000     0.000 r  
+    E3                                                0.000     0.000 r  CLK100MHZ (IN)
+                         net (fo=0)                   0.000     0.000    CLK100MHZ
+    E3                   IBUF (Prop_ibuf_I_O)         1.482     1.482 r  CLK100MHZ_IBUF_inst/O
+                         net (fo=1, unplaced)         0.803     2.285    CLK100MHZ_IBUF
+                         BUFG (Prop_bufg_I_O)         0.096     2.381 r  CLK100MHZ_IBUF_BUFG_inst/O
+                         net (fo=272, unplaced)       0.584     2.965    matmul_i/CLK100MHZ_IBUF_BUFG
+                         FDCE                                         r  matmul_i/cycle_count_reg[2]/C
+  -------------------------------------------------------------------    -------------------
+                         FDCE (Prop_fdce_C_Q)         0.478     3.443 f  matmul_i/cycle_count_reg[2]/Q
+                         net (fo=9, unplaced)         0.804     4.247    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_1[2]
+                         LUT4 (Prop_lut4_I1_O)        0.295     4.542 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_67/O
+                         net (fo=32, unplaced)        0.803     5.345    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_67_n_0
+                         LUT6 (Prop_lut6_I0_O)        0.124     5.469 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_51/O
+                         net (fo=1, unplaced)         0.449     5.918    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_51_n_0
+                         LUT5 (Prop_lut5_I0_O)        0.124     6.042 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_17/O
+                         net (fo=15, unplaced)        0.803     6.845    matmul_i/gen_row[0].gen_col[0].pe_i/a_bus[0][0]_1[15]
+                         DSP48E1 (Prop_dsp48e1_A[29]_P[0])
+                                                      3.841    10.686 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result/P[0]
+                         net (fo=2, unplaced)         0.803    11.488    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result__0[0]
+                         LUT2 (Prop_lut2_I0_O)        0.150    11.638 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out[0]_i_6/O
+                         net (fo=1, unplaced)         0.000    11.638    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out[0]_i_6_n_0
+                         CARRY4 (Prop_carry4_DI[0]_CO[3])
+                                                      0.576    12.214 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[0]_i_2/CO[3]
+                         net (fo=1, unplaced)         0.000    12.214    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[0]_i_2_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.331 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[4]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.331    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[4]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.448 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[8]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.448    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[8]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.565 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[12]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.565    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[12]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.682 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[16]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.682    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[16]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.799 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[20]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.799    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[20]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.916 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[24]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.916    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[24]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.033 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[28]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.033    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[28]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.150 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[32]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.150    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[32]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.267 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[36]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.267    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[36]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.384 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[40]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.384    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[40]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.501 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[44]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.501    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[44]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.618 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[48]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.618    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[48]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.337    13.955 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[52]_i_1/O[1]
+                         net (fo=1, unplaced)         0.000    13.955    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[52]_i_1_n_6
+                         FDCE                                         r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[53]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock CLK100MHZ rise edge)
+                                                     12.000    12.000 r  
+    E3                                                0.000    12.000 r  CLK100MHZ (IN)
+                         net (fo=0)                   0.000    12.000    CLK100MHZ
+    E3                   IBUF (Prop_ibuf_I_O)         1.411    13.411 r  CLK100MHZ_IBUF_inst/O
+                         net (fo=1, unplaced)         0.763    14.174    CLK100MHZ_IBUF
+                         BUFG (Prop_bufg_I_O)         0.091    14.265 r  CLK100MHZ_IBUF_BUFG_inst/O
+                         net (fo=272, unplaced)       0.439    14.704    matmul_i/gen_row[0].gen_col[0].pe_i/CLK100MHZ_IBUF_BUFG
+                         FDCE                                         r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[53]/C
+                         clock pessimism              0.116    14.820    
+                         clock uncertainty           -0.035    14.784    
+                         FDCE (Setup_fdce_C_D)        0.076    14.860    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[53]
+  -------------------------------------------------------------------
+                         required time                         14.860    
+                         arrival time                         -13.955    
+  -------------------------------------------------------------------
+                         slack                                  0.905    
+
+Slack (MET) :             0.911ns  (required time - arrival time)
+  Source:                 matmul_i/cycle_count_reg[2]/C
+                            (rising edge-triggered cell FDCE clocked by CLK100MHZ  {rise@0.000ns fall@6.000ns period=12.000ns})
+  Destination:            matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[55]/D
+                            (rising edge-triggered cell FDCE clocked by CLK100MHZ  {rise@0.000ns fall@6.000ns period=12.000ns})
+  Path Group:             CLK100MHZ
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            12.000ns  (CLK100MHZ rise@12.000ns - CLK100MHZ rise@0.000ns)
+  Data Path Delay:        10.985ns  (logic 7.323ns (66.665%)  route 3.662ns (33.335%))
+  Logic Levels:           19  (CARRY4=14 DSP48E1=1 LUT2=1 LUT4=1 LUT5=1 LUT6=1)
+  Clock Path Skew:        -0.145ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    2.704ns = ( 14.704 - 12.000 ) 
+    Source Clock Delay      (SCD):    2.965ns
+    Clock Pessimism Removal (CPR):    0.116ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock CLK100MHZ rise edge)
+                                                      0.000     0.000 r  
+    E3                                                0.000     0.000 r  CLK100MHZ (IN)
+                         net (fo=0)                   0.000     0.000    CLK100MHZ
+    E3                   IBUF (Prop_ibuf_I_O)         1.482     1.482 r  CLK100MHZ_IBUF_inst/O
+                         net (fo=1, unplaced)         0.803     2.285    CLK100MHZ_IBUF
+                         BUFG (Prop_bufg_I_O)         0.096     2.381 r  CLK100MHZ_IBUF_BUFG_inst/O
+                         net (fo=272, unplaced)       0.584     2.965    matmul_i/CLK100MHZ_IBUF_BUFG
+                         FDCE                                         r  matmul_i/cycle_count_reg[2]/C
+  -------------------------------------------------------------------    -------------------
+                         FDCE (Prop_fdce_C_Q)         0.478     3.443 f  matmul_i/cycle_count_reg[2]/Q
+                         net (fo=9, unplaced)         0.804     4.247    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_1[2]
+                         LUT4 (Prop_lut4_I1_O)        0.295     4.542 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_67/O
+                         net (fo=32, unplaced)        0.803     5.345    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_67_n_0
+                         LUT6 (Prop_lut6_I0_O)        0.124     5.469 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_51/O
+                         net (fo=1, unplaced)         0.449     5.918    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_51_n_0
+                         LUT5 (Prop_lut5_I0_O)        0.124     6.042 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result_i_17/O
+                         net (fo=15, unplaced)        0.803     6.845    matmul_i/gen_row[0].gen_col[0].pe_i/a_bus[0][0]_1[15]
+                         DSP48E1 (Prop_dsp48e1_A[29]_P[0])
+                                                      3.841    10.686 r  matmul_i/gen_row[0].gen_col[0].pe_i/mul_result/P[0]
+                         net (fo=2, unplaced)         0.803    11.488    matmul_i/gen_row[0].gen_col[0].pe_i/mul_result__0[0]
+                         LUT2 (Prop_lut2_I0_O)        0.150    11.638 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out[0]_i_6/O
+                         net (fo=1, unplaced)         0.000    11.638    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out[0]_i_6_n_0
+                         CARRY4 (Prop_carry4_DI[0]_CO[3])
+                                                      0.576    12.214 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[0]_i_2/CO[3]
+                         net (fo=1, unplaced)         0.000    12.214    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[0]_i_2_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.331 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[4]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.331    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[4]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.448 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[8]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.448    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[8]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.565 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[12]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.565    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[12]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.682 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[16]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.682    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[16]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.799 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[20]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.799    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[20]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    12.916 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[24]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    12.916    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[24]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.033 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[28]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.033    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[28]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.150 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[32]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.150    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[32]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.267 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[36]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.267    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[36]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.384 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[40]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.384    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[40]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.501 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[44]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.501    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[44]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.117    13.618 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[48]_i_1/CO[3]
+                         net (fo=1, unplaced)         0.000    13.618    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[48]_i_1_n_0
+                         CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.331    13.949 r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[52]_i_1/O[3]
+                         net (fo=1, unplaced)         0.000    13.949    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[52]_i_1_n_4
+                         FDCE                                         r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[55]/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock CLK100MHZ rise edge)
+                                                     12.000    12.000 r  
+    E3                                                0.000    12.000 r  CLK100MHZ (IN)
+                         net (fo=0)                   0.000    12.000    CLK100MHZ
+    E3                   IBUF (Prop_ibuf_I_O)         1.411    13.411 r  CLK100MHZ_IBUF_inst/O
+                         net (fo=1, unplaced)         0.763    14.174    CLK100MHZ_IBUF
+                         BUFG (Prop_bufg_I_O)         0.091    14.265 r  CLK100MHZ_IBUF_BUFG_inst/O
+                         net (fo=272, unplaced)       0.439    14.704    matmul_i/gen_row[0].gen_col[0].pe_i/CLK100MHZ_IBUF_BUFG
+                         FDCE                                         r  matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[55]/C
+                         clock pessimism              0.116    14.820    
+                         clock uncertainty           -0.035    14.784    
+                         FDCE (Setup_fdce_C_D)        0.076    14.860    matmul_i/gen_row[0].gen_col[0].pe_i/acc_out_reg[55]
+  -------------------------------------------------------------------
+                         required time                         14.860    
+                         arrival time                         -13.949    
+  -------------------------------------------------------------------
+                         slack                                  0.911    
+
+
+
+
+
+Pulse Width Checks
+--------------------------------------------------------------------------------------
+Clock Name:         CLK100MHZ
+Waveform(ns):       { 0.000 6.000 }
+Period(ns):         12.000
+Sources:            { CLK100MHZ }
+
+Check Type        Corner  Lib Pin             Reference Pin  Required(ns)  Actual(ns)  Slack(ns)  Location  Pin
+Min Period        n/a     RAMB18E1/CLKARDCLK  n/a            2.576         12.000      9.424                matrix_a_bram_i/U0/inst_blk_mem_gen/gnbram.gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/prim_init.ram/DEVICE_7SERIES.NO_BMM_INFO.SP.WIDE_PRIM18.ram/CLKARDCLK
+Min Period        n/a     RAMB18E1/CLKBWRCLK  n/a            2.576         12.000      9.424                matrix_a_bram_i/U0/inst_blk_mem_gen/gnbram.gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/prim_init.ram/DEVICE_7SERIES.NO_BMM_INFO.SP.WIDE_PRIM18.ram/CLKBWRCLK
+Min Period        n/a     RAMB18E1/CLKARDCLK  n/a            2.576         12.000      9.424                matrix_b_bram_i/U0/inst_blk_mem_gen/gnbram.gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/prim_init.ram/DEVICE_7SERIES.NO_BMM_INFO.SP.WIDE_PRIM18.ram/CLKARDCLK
+Min Period        n/a     RAMB18E1/CLKBWRCLK  n/a            2.576         12.000      9.424                matrix_b_bram_i/U0/inst_blk_mem_gen/gnbram.gnativebmg.native_blk_mem_gen/valid.cstr/ramloop[0].ram.r/prim_init.ram/DEVICE_7SERIES.NO_BMM_INFO.SP.WIDE_PRIM18.ram/CLKBWRCLK
+Min Period        n/a     BUFG/I              n/a            2.155         12.000      9.845                CLK100MHZ_IBUF_BUFG_inst/I
+Min Period        n/a     FDCE/C              n/a            1.000         12.000      11.000               a_addr_reg[0]/C
+Min Period        n/a     FDCE/C              n/a            1.000         12.000      11.000               a_addr_reg[1]/C
+Min Period        n/a     FDCE/C              n/a            1.000         12.000      11.000               a_addr_reg[2]/C
+Min Period        n/a     FDCE/C              n/a            1.000         12.000      11.000               a_addr_reg[3]/C
+Min Period        n/a     FDCE/C              n/a            1.000         12.000      11.000               a_addr_reg[4]/C
+Low Pulse Width   Slow    FDCE/C              n/a            0.500         6.000       5.500                a_addr_reg[0]/C
+Low Pulse Width   Fast    FDCE/C              n/a            0.500         6.000       5.500                a_addr_reg[0]/C
+Low Pulse Width   Slow    FDCE/C              n/a            0.500         6.000       5.500                a_addr_reg[1]/C
+Low Pulse Width   Fast    FDCE/C              n/a            0.500         6.000       5.500                a_addr_reg[1]/C
+Low Pulse Width   Slow    FDCE/C              n/a            0.500         6.000       5.500                a_addr_reg[2]/C
+Low Pulse Width   Fast    FDCE/C              n/a            0.500         6.000       5.500                a_addr_reg[2]/C
+Low Pulse Width   Slow    FDCE/C              n/a            0.500         6.000       5.500                a_addr_reg[3]/C
+Low Pulse Width   Fast    FDCE/C              n/a            0.500         6.000       5.500                a_addr_reg[3]/C
+Low Pulse Width   Slow    FDCE/C              n/a            0.500         6.000       5.500                a_addr_reg[4]/C
+Low Pulse Width   Fast    FDCE/C              n/a            0.500         6.000       5.500                a_addr_reg[4]/C
+High Pulse Width  Slow    FDCE/C              n/a            0.500         6.000       5.500                a_addr_reg[0]/C
+High Pulse Width  Fast    FDCE/C              n/a            0.500         6.000       5.500                a_addr_reg[0]/C
+High Pulse Width  Slow    FDCE/C              n/a            0.500         6.000       5.500                a_addr_reg[1]/C
+High Pulse Width  Fast    FDCE/C              n/a            0.500         6.000       5.500                a_addr_reg[1]/C
+High Pulse Width  Slow    FDCE/C              n/a            0.500         6.000       5.500                a_addr_reg[2]/C
+High Pulse Width  Fast    FDCE/C              n/a            0.500         6.000       5.500                a_addr_reg[2]/C
+High Pulse Width  Slow    FDCE/C              n/a            0.500         6.000       5.500                a_addr_reg[3]/C
+High Pulse Width  Fast    FDCE/C              n/a            0.500         6.000       5.500                a_addr_reg[3]/C
+High Pulse Width  Slow    FDCE/C              n/a            0.500         6.000       5.500                a_addr_reg[4]/C
+High Pulse Width  Fast    FDCE/C              n/a            0.500         6.000       5.500                a_addr_reg[4]/C
+
+
+
