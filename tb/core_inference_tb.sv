@@ -24,6 +24,7 @@ module core_inference_tb #(
     logic end_token;
 
     logic [TOKEN_WIDTH-1:0] input_tokens [0:NUM_TOKENS-1];
+    logic [TOKEN_WIDTH-1:0] file_tokens [0:255];
     string token_file;
 
     top_inference #(
@@ -76,7 +77,12 @@ module core_inference_tb #(
         if (!$value$plusargs("TOKENS=%s", token_file)) begin
             token_file = "generated/reference/input_tokens.mem";
         end
-        $readmemh(token_file, input_tokens);
+        // Read the complete file into a larger staging array. The simulation
+        // uses only the first NUM_TOKENS entries below.
+        $readmemh(token_file, file_tokens);
+        for (int i = 0; i < NUM_TOKENS; i++) begin
+            input_tokens[i] = file_tokens[i];
+        end
 
         for (int i = 0; i < NUM_TOKENS; i++) begin
             if (int'(input_tokens[i]) >= VOCAB_SIZE) begin

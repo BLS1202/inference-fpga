@@ -31,7 +31,28 @@ module rmsnorm #(
     logic start, busy, valid;
     logic [SUM_WIDTH-1:0] rad, root, rem;
 
-    enum logic [2:0] {IDLE, S1, S2, S3, S4, SQRT, S5} state, nState;
+    localparam int SCALE_NUM_WIDTH = (2 * FRAC_BITS) + 1;
+    localparam int DIV_BIT_WIDTH = (SCALE_NUM_WIDTH <= 1) ? 1 : $clog2(SCALE_NUM_WIDTH + 1);
+    localparam int NORM_INDEX_WIDTH = (N_EMBD <= 1) ? 1 : $clog2(N_EMBD);
+    localparam logic [SCALE_NUM_WIDTH-1:0] SCALE_NUM =
+        SCALE_NUM_WIDTH'(1 << (2 * FRAC_BITS));
+
+    logic signed [OUT_WIDTH-1:0] scale_q12;
+    logic [SUM_WIDTH:0] div_rem;
+    logic [SCALE_NUM_WIDTH-1:0] div_quot;
+    logic [DIV_BIT_WIDTH-1:0] div_bit;
+    logic [SUM_WIDTH:0] div_rem_shifted;
+    logic [SUM_WIDTH:0] div_rem_next;
+    logic [SCALE_NUM_WIDTH-1:0] div_quot_next;
+
+    logic [NORM_INDEX_WIDTH-1:0] norm_index;
+    logic signed [(IN_WIDTH+OUT_WIDTH)-1:0] norm_product;
+    logic signed [SUM_WIDTH:0] norm_value;
+
+    enum logic [3:0] {
+        IDLE, S1, S2, S3, S4, SQRT,
+        SCALE_INIT, SCALE_RUN, NORM, DONE
+    } state, nState;
 
     genvar i;
     generate
@@ -77,16 +98,28 @@ module rmsnorm #(
             S3: nState = S4;
             S4: nState = SQRT;
             SQRT: begin
-                if (valid) nState = S5;
+                if (valid) nState = SCALE_INIT;
                 else nState = SQRT;
             end
-            S5: nState = IDLE;
+            SCALE_INIT: begin
+                if (root == '0) nState = NORM;
+                else nState = SCALE_RUN;
+            end
+            SCALE_RUN: begin
+                if (div_bit == '0) nState = NORM;
+                else nState = SCALE_RUN;
+            end
+            NORM: begin
+                if (norm_index == N_EMBD - 1) nState = DONE;
+                else nState = NORM;
+            end
+            DONE: nState = IDLE;
             default: nState = IDLE;
         endcase
     end
 
     always_comb begin
-        valid_out = (state == S5);
+        valid_out = (state == DONE);
         start = (state == SQRT);
     end
 
@@ -126,7 +159,24 @@ module rmsnorm #(
         end
     end
 
-    assign rad = (fin_sum / N_EMBD_VALUE) + EPS_VALUE;
+    // N_EMBD is 16 for MicroGPT, so this is an exact divide by 16.
+    assign rad = (fin_sum >> $clog2(N_EMBD)) + EPS_VALUE;
+
+    always_comb begin
+        div_rem_shifted = (div_rem << 1) | SCALE_NUM[div_bit];
+        div_rem_next = div_rem_shifted;
+        div_quot_next = div_quot;
+
+        if (div_rem_shifted >= {{1{1'b0}}, root}) begin
+            div_rem_next = div_rem_shifted - {{1{1'b0}}, root};
+            div_quot_next[div_bit] = 1'b1;
+        end
+    end
+
+    always_comb begin
+        norm_product = $signed(x[norm_index]) * $signed(scale_q12);
+        norm_value = $signed(norm_product) >>> FRAC_BITS;
+    end
 
     sqrt_int_fsm #(
         .WIDTH(SUM_WIDTH)
@@ -141,20 +191,60 @@ module rmsnorm #(
         .rem(rem)
     );
 
+    function automatic logic signed [OUT_WIDTH-1:0] sat_scale;
+        input logic [SCALE_NUM_WIDTH-1:0] value;
+        begin
+            if (value > ((1 << (OUT_WIDTH-1)) - 1))
+                sat_scale = {1'b0, {(OUT_WIDTH-1){1'b1}}};
+            else
+                sat_scale = value[OUT_WIDTH-1:0];
+        end
+    endfunction
+
     always_ff @(posedge clk or negedge rst_l) begin
         if (!rst_l) begin
+            scale_q12 <= '0;
+            div_rem <= '0;
+            div_quot <= '0;
+            div_bit <= '0;
+            norm_index <= '0;
             x_out <= '0;
-        end else if (state == S5) begin
-            for (int k = 0; k < N_EMBD; k++) begin
-                if (root == '0) begin
-                    x_out[k*OUT_WIDTH +: OUT_WIDTH] <= '0;
-                end else begin
-                    x_out[k*OUT_WIDTH +: OUT_WIDTH] <= sat_out(
-                        ($signed({{(SUM_WIDTH+1-IN_WIDTH){x[k][IN_WIDTH-1]}}, x[k]}) <<< FRAC_BITS) /
-                        $signed({1'b0, root})
-                    );
+        end else begin
+            case (state)
+                SCALE_INIT: begin
+                    norm_index <= '0;
+                    if (root == '0) begin
+                        scale_q12 <= '0;
+                    end else begin
+                        div_rem <= '0;
+                        div_quot <= '0;
+                        div_bit <= SCALE_NUM_WIDTH - 1;
+                    end
                 end
-            end
+
+                SCALE_RUN: begin
+                    div_rem <= div_rem_next;
+                    div_quot <= div_quot_next;
+
+                    if (div_bit == '0)
+                        scale_q12 <= sat_scale(div_quot_next);
+                    else
+                        div_bit <= div_bit - 1'b1;
+                end
+
+                NORM: begin
+                    if (scale_q12 == '0)
+                        x_out[norm_index*OUT_WIDTH +: OUT_WIDTH] <= '0;
+                    else
+                        x_out[norm_index*OUT_WIDTH +: OUT_WIDTH] <= sat_out(norm_value);
+
+                    if (norm_index != N_EMBD - 1)
+                        norm_index <= norm_index + 1'b1;
+                end
+
+                default: begin
+                end
+            endcase
         end
     end
 

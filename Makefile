@@ -1,5 +1,6 @@
 VERILATOR ?= verilator
 BUILD_DIR ?= build/verilator
+RTL_DIR ?= rtl_sim
 M ?= 2
 K ?= 3
 N ?= 2
@@ -27,7 +28,7 @@ sim-matmul:
 		--Mdir $(BUILD_DIR)/matmul_unit_tb \
 		--top-module matmul_unit_tb \
 		-GM=$(M) -GK=$(K) -GN=$(N) \
-		rtl/matmul_unit.sv \
+		$(RTL_DIR)/matmul_unit.sv \
 		tb/matmul_unit_tb.sv
 	$(BUILD_DIR)/matmul_unit_tb/Vmatmul_unit_tb \
 		+MAT_A=$(MATMUL_OUTDIR)/mat_a.mem \
@@ -43,8 +44,8 @@ sim-rmsnorm:
 		--Mdir $(BUILD_DIR)/rmsnorm_tb \
 		--top-module rmsnorm_tb \
 		-GN_EMBD=$(N_EMBD) \
-		rtl/sqrt_engine.sv \
-		rtl/rmsnorm.sv \
+		$(RTL_DIR)/sqrt_engine.sv \
+		$(RTL_DIR)/rmsnorm.sv \
 		tb/rmsnorm_tb.sv
 	$(BUILD_DIR)/rmsnorm_tb/Vrmsnorm_tb \
 		+INPUT=$(RMSNORM_OUTDIR)/rmsnorm_input.mem \
@@ -60,7 +61,7 @@ sim-softmax:
 		--top-module softmax_tb \
 		-GVECTOR_SIZE=$(VECTOR_SIZE) \
 		-GEXP_INIT_FILE=\"$(SOFTMAX_OUTDIR)/exp_lut.mem\" \
-		rtl/softmax.sv \
+		$(RTL_DIR)/softmax.sv \
 		tb/softmax_tb.sv
 	$(BUILD_DIR)/softmax_tb/Vsoftmax_tb \
 		+LOGITS=$(SOFTMAX_OUTDIR)/softmax_logits.mem \
@@ -75,18 +76,18 @@ sim-core:
 		--Mdir $(BUILD_DIR)/core_inference_tb \
 		--top-module core_inference_tb \
 		-GNUM_TOKENS=$(NUM_TOKENS) \
-		rtl/fixed_point_utils.sv \
-		rtl/embedding_rom.sv \
-		rtl/embedding_lookup.sv \
-		rtl/sqrt_engine.sv \
-		rtl/rmsnorm.sv \
-		rtl/matmul_unit.sv \
-		rtl/linear.sv \
-		rtl/relu.sv \
-		rtl/softmax.sv \
-		rtl/attention_score.sv \
-		rtl/kv_cache.sv \
-		rtl/core_inference.sv \
+		$(RTL_DIR)/fixed_point_utils.sv \
+		$(RTL_DIR)/embedding_rom.sv \
+		$(RTL_DIR)/embedding_lookup.sv \
+		$(RTL_DIR)/sqrt_engine.sv \
+		$(RTL_DIR)/rmsnorm.sv \
+		$(RTL_DIR)/matmul_unit.sv \
+		$(RTL_DIR)/linear.sv \
+		$(RTL_DIR)/relu.sv \
+		$(RTL_DIR)/softmax.sv \
+		$(RTL_DIR)/attention_score.sv \
+		$(RTL_DIR)/kv_cache.sv \
+		$(RTL_DIR)/core_inference.sv \
 		tb/core_inference_tb.sv
 	$(BUILD_DIR)/core_inference_tb/Vcore_inference_tb \
 		+TOKENS=generated/reference/input_tokens.mem \

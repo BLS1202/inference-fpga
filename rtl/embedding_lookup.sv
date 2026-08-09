@@ -4,52 +4,40 @@ module embedding_lookup #(
     parameter int N_EMBD = 16,
     parameter int DATA_WIDTH = 16,
     parameter int SUM_WIDTH = 16,
-    parameter string WTE_INIT_FILE = "microgpt/generated/wte_q12.hex",
-    parameter string WPE_INIT_FILE = "microgpt/generated/wpe_q12.hex"
+    parameter int TOKEN_ADDR_WIDTH = (VOCAB_SIZE*N_EMBD <= 1) ? 1 : $clog2(VOCAB_SIZE*N_EMBD),
+    parameter int POS_ADDR_WIDTH = (BLOCK_SIZE*N_EMBD <= 1) ? 1 : $clog2(BLOCK_SIZE*N_EMBD)
 ) (
-    input  logic                                clk,
-    input  logic                                rst_n,
-    input  logic                                valid_in,
-    input  logic [$clog2(VOCAB_SIZE)-1:0]       token_id,
-    input  logic [$clog2(BLOCK_SIZE)-1:0]       pos_id,
-    output logic                                valid_out,
-    output logic signed [N_EMBD*SUM_WIDTH-1:0]  embedding
+    input  logic clk,
+    input  logic rst_n,
+    input  logic valid_in,
+    input  logic [$clog2(VOCAB_SIZE)-1:0] token_id,
+    input  logic [$clog2(BLOCK_SIZE)-1:0] pos_id,
+
+    output logic token_bram_en,
+    output logic [TOKEN_ADDR_WIDTH-1:0] token_bram_addr,
+    input  logic [DATA_WIDTH-1:0] token_bram_dout,
+    output logic pos_bram_en,
+    output logic [POS_ADDR_WIDTH-1:0] pos_bram_addr,
+    input  logic [DATA_WIDTH-1:0] pos_bram_dout,
+
+    output logic valid_out,
+    output logic signed [N_EMBD*SUM_WIDTH-1:0] embedding
 );
 
-    logic token_valid;
-    logic pos_valid;
-    logic signed [N_EMBD*DATA_WIDTH-1:0] token_vec;
-    logic signed [N_EMBD*DATA_WIDTH-1:0] pos_vec;
+    localparam int INDEX_WIDTH = (N_EMBD <= 1) ? 1 : $clog2(N_EMBD);
+    typedef enum logic [1:0] {ST_IDLE, ST_READ, ST_DRAIN, ST_DONE} state_t;
+    state_t state;
 
-    embedding_rom #(
-        .ROWS(VOCAB_SIZE),
-        .COLS(N_EMBD),
-        .DATA_WIDTH(DATA_WIDTH),
-        .INIT_FILE(WTE_INIT_FILE)
-    ) token_embedding_rom (
-        .clk(clk),
-        .rst_n(rst_n),
-        .valid_in(valid_in),
-        .row_idx(token_id),
-        .valid_out(token_valid),
-        .row_data(token_vec)
-    );
+    logic [INDEX_WIDTH-1:0] issue_index, issue_index_d1, issue_index_d2;
+    logic request_valid_d1, request_valid_d2;
+    logic [TOKEN_ADDR_WIDTH-1:0] token_base_addr;
+    logic [POS_ADDR_WIDTH-1:0] pos_base_addr;
+    logic signed [N_EMBD*DATA_WIDTH-1:0] token_vec, pos_vec;
 
-    embedding_rom #(
-        .ROWS(BLOCK_SIZE),
-        .COLS(N_EMBD),
-        .DATA_WIDTH(DATA_WIDTH),
-        .INIT_FILE(WPE_INIT_FILE)
-    ) position_embedding_rom (
-        .clk(clk),
-        .rst_n(rst_n),
-        .valid_in(valid_in),
-        .row_idx(pos_id),
-        .valid_out(pos_valid),
-        .row_data(pos_vec)
-    );
-
-    assign valid_out = token_valid & pos_valid;
+    assign token_bram_en = (state == ST_READ) || request_valid_d1 || request_valid_d2;
+    assign pos_bram_en   = (state == ST_READ) || request_valid_d1 || request_valid_d2;
+    assign token_bram_addr = token_base_addr + issue_index;
+    assign pos_bram_addr = pos_base_addr + issue_index;
 
     function automatic logic signed [DATA_WIDTH-1:0] sat_sum;
         input logic signed [DATA_WIDTH-1:0] a;
@@ -57,35 +45,67 @@ module embedding_lookup #(
         logic signed [DATA_WIDTH:0] sum;
         begin
             sum = $signed(a) + $signed(b);
-            if (sum > ((1 <<< (DATA_WIDTH-1)) - 1)) begin
+            if (sum > ((1 <<< (DATA_WIDTH-1)) - 1))
                 sat_sum = {1'b0, {(DATA_WIDTH-1){1'b1}}};
-            end else if (sum < -(1 <<< (DATA_WIDTH-1))) begin
+            else if (sum < -(1 <<< (DATA_WIDTH-1)))
                 sat_sum = {1'b1, {(DATA_WIDTH-1){1'b0}}};
-            end else begin
+            else
                 sat_sum = sum[DATA_WIDTH-1:0];
-            end
         end
     endfunction
 
     always_comb begin
         embedding = '0;
         for (int i = 0; i < N_EMBD; i++) begin
-            embedding[i*SUM_WIDTH +: SUM_WIDTH] =
-                sat_sum(
-                    $signed(token_vec[i*DATA_WIDTH +: DATA_WIDTH]),
-                    $signed(pos_vec[i*DATA_WIDTH +: DATA_WIDTH])
-                );
+            embedding[i*SUM_WIDTH +: SUM_WIDTH] = sat_sum(
+                token_vec[i*DATA_WIDTH +: DATA_WIDTH],
+                pos_vec[i*DATA_WIDTH +: DATA_WIDTH]
+            );
         end
     end
 
-`ifndef SYNTHESIS
-    always_ff @(posedge clk) begin
-        if (rst_n && valid_in) begin
-            assert (int'(token_id) < VOCAB_SIZE)
-                else $fatal(1, "embedding_lookup token_id out of range: %0d", token_id);
-            assert (int'(pos_id) < BLOCK_SIZE)
-                else $fatal(1, "embedding_lookup pos_id out of range: %0d", pos_id);
+    always_ff @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            state <= ST_IDLE;
+            issue_index <= '0;
+            issue_index_d1 <= '0;
+            issue_index_d2 <= '0;
+            request_valid_d1 <= 1'b0;
+            request_valid_d2 <= 1'b0;
+            token_base_addr <= '0;
+            pos_base_addr <= '0;
+            token_vec <= '0;
+            pos_vec <= '0;
+            valid_out <= 1'b0;
+        end else begin
+            valid_out <= 1'b0;
+            request_valid_d1 <= (state == ST_READ);
+            request_valid_d2 <= request_valid_d1;
+            issue_index_d1 <= issue_index;
+            issue_index_d2 <= issue_index_d1;
+
+            if (request_valid_d2) begin
+                token_vec[issue_index_d2*DATA_WIDTH +: DATA_WIDTH] <= token_bram_dout;
+                pos_vec[issue_index_d2*DATA_WIDTH +: DATA_WIDTH] <= pos_bram_dout;
+                if (issue_index_d2 == N_EMBD - 1) valid_out <= 1'b1;
+            end
+
+            case (state)
+                ST_IDLE: if (valid_in) begin
+                    token_base_addr <= token_id * N_EMBD;
+                    pos_base_addr <= pos_id * N_EMBD;
+                    issue_index <= '0;
+                    state <= ST_READ;
+                end
+                ST_READ: if (issue_index == N_EMBD - 1)
+                    state <= ST_DRAIN;
+                else
+                    issue_index <= issue_index + 1'b1;
+                ST_DRAIN: if (request_valid_d2 && issue_index_d2 == N_EMBD - 1)
+                    state <= ST_DONE;
+                ST_DONE: state <= ST_IDLE;
+                default: state <= ST_IDLE;
+            endcase
         end
     end
-`endif
 endmodule
