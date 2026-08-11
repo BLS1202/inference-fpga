@@ -5,7 +5,7 @@ module softmax_unit #(
     parameter int FRAC_BITS = 12,
     parameter int EXP_ADDR_WIDTH = 12,
     parameter int EXP_LUT_SIZE = 1 << EXP_ADDR_WIDTH,
-    parameter string EXP_INIT_FILE = "microgpt/generated/exp_q12.hex"
+    parameter string EXP_INIT_FILE = "exp_lut.mem"
 ) (
     input  logic clk,
     input  logic rst_l,

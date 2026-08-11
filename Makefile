@@ -76,16 +76,18 @@ sim-core:
 		--Mdir $(BUILD_DIR)/core_inference_tb \
 		--top-module core_inference_tb \
 		-GNUM_TOKENS=$(NUM_TOKENS) \
+		-GEXP_INIT_FILE=\"generated/softmax/exp_lut.mem\" \
 		$(RTL_DIR)/fixed_point_utils.sv \
-		$(RTL_DIR)/embedding_rom.sv \
+		$(RTL_DIR)/bram_models.sv \
 		$(RTL_DIR)/embedding_lookup.sv \
 		$(RTL_DIR)/sqrt_engine.sv \
 		$(RTL_DIR)/rmsnorm.sv \
 		$(RTL_DIR)/matmul_unit.sv \
-		$(RTL_DIR)/linear.sv \
 		$(RTL_DIR)/relu.sv \
-		$(RTL_DIR)/softmax.sv \
+		$(RTL_DIR)/bram_tile_reader.sv \
 		$(RTL_DIR)/attention_score.sv \
+		$(RTL_DIR)/attention_fused.sv \
+		$(RTL_DIR)/categorical_weights.sv \
 		$(RTL_DIR)/kv_cache.sv \
 		$(RTL_DIR)/core_inference.sv \
 		tb/core_inference_tb.sv

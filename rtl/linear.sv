@@ -40,7 +40,8 @@ module linear_layer #(
     logic matmul_valid;
 
     assign busy = (state != ST_IDLE);
-    assign weight_bram_en = (state == ST_READ) || request_valid_d1 || request_valid_d2;
+    assign weight_bram_en = (state == ST_READ) || request_valid_d1 ||
+                            request_valid_d2;
     assign weight_bram_addr = issue_index;
     assign matmul_start = (state == ST_START_MATMUL);
 

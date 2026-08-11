@@ -28,14 +28,17 @@ module embedding_lookup #(
     typedef enum logic [1:0] {ST_IDLE, ST_READ, ST_DRAIN, ST_DONE} state_t;
     state_t state;
 
-    logic [INDEX_WIDTH-1:0] issue_index, issue_index_d1, issue_index_d2;
+    logic [INDEX_WIDTH-1:0] issue_index;
+    logic [INDEX_WIDTH-1:0] issue_index_d1, issue_index_d2;
     logic request_valid_d1, request_valid_d2;
     logic [TOKEN_ADDR_WIDTH-1:0] token_base_addr;
     logic [POS_ADDR_WIDTH-1:0] pos_base_addr;
     logic signed [N_EMBD*DATA_WIDTH-1:0] token_vec, pos_vec;
 
-    assign token_bram_en = (state == ST_READ) || request_valid_d1 || request_valid_d2;
-    assign pos_bram_en   = (state == ST_READ) || request_valid_d1 || request_valid_d2;
+    assign token_bram_en = (state == ST_READ) || request_valid_d1 ||
+                           request_valid_d2;
+    assign pos_bram_en   = (state == ST_READ) || request_valid_d1 ||
+                           request_valid_d2;
     assign token_bram_addr = token_base_addr + issue_index;
     assign pos_bram_addr = pos_base_addr + issue_index;
 
@@ -87,7 +90,6 @@ module embedding_lookup #(
             if (request_valid_d2) begin
                 token_vec[issue_index_d2*DATA_WIDTH +: DATA_WIDTH] <= token_bram_dout;
                 pos_vec[issue_index_d2*DATA_WIDTH +: DATA_WIDTH] <= pos_bram_dout;
-                if (issue_index_d2 == N_EMBD - 1) valid_out <= 1'b1;
             end
 
             case (state)
@@ -103,7 +105,10 @@ module embedding_lookup #(
                     issue_index <= issue_index + 1'b1;
                 ST_DRAIN: if (request_valid_d2 && issue_index_d2 == N_EMBD - 1)
                     state <= ST_DONE;
-                ST_DONE: state <= ST_IDLE;
+                ST_DONE: begin
+                    valid_out <= 1'b1;
+                    state <= ST_IDLE;
+                end
                 default: state <= ST_IDLE;
             endcase
         end

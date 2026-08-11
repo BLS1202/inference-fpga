@@ -250,4 +250,5 @@ set_property -dict {PACKAGE_PIN D4 IOSTANDARD LVCMOS33} [get_ports UART_RXD_OUT]
 #set_property -dict { PACKAGE_PIN M14   IOSTANDARD LVCMOS33 } [get_ports { QSPI_DQ[3] }]; #IO_L2N_T0_D03_14 Sch=qspi_dq[3]
 #set_property -dict { PACKAGE_PIN L13   IOSTANDARD LVCMOS33 } [get_ports { QSPI_CSN }]; #IO_L6P_T0_FCS_B_14 Sch=qspi_csn
 
-create_clock -period 12.000 -name CLK100MHZ -waveform {0.000 6.000} [get_ports CLK100MHZ]
+create_clock -period 20.000 -name CLK100MHZ -waveform {0.000 10.000} -add [get_ports CLK100MHZ]
+

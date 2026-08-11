@@ -10,7 +10,7 @@ module nexys_a7_inference_top #(
     parameter int DATA_WIDTH = 16,
     parameter int ACC_WIDTH = 64,
     parameter int FRAC_BITS = 12,
-    parameter string EXP_INIT_FILE = "microgpt/generated/exp_q12.hex"
+    parameter string EXP_INIT_FILE = "exp_lut.mem"
 ) (
     input  logic       CLK100MHZ,
     input  logic [1:0] sw,

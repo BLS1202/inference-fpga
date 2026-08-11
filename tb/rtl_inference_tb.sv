@@ -64,8 +64,8 @@ module rtl_inference_tb #(
         rst_l = 1'b0;
         start = 1'b0;
         clear_kv_cache = 1'b0;
-        token_id = TOKEN_WIDTH'(VOCAB_SIZE - 1);
-        pos_id = '0;
+        token_id = TOKEN_WIDTH'(0);
+        pos_id = POS_WIDTH'(1);
 
         repeat (2) @(posedge clk);
         rst_l = 1'b1;

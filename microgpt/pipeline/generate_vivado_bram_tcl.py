@@ -7,17 +7,6 @@ import argparse
 from pathlib import Path
 
 
-LAYER_PREFIXES = {
-    "layer0_attn_wq": "q",
-    "layer0_attn_wk": "k",
-    "layer0_attn_wv": "v",
-    "layer0_attn_wo": "wo",
-    "layer0_mlp_fc1": "fc1",
-    "layer0_mlp_fc2": "fc2",
-    "lm_head": "lm",
-}
-
-
 def coe_depth(path: Path) -> int:
     values = []
     in_vector = False
@@ -41,15 +30,22 @@ def tcl_path(path: Path) -> str:
 
 def ip_tcl(module_name: str, coe: Path, depth: int, latency: int) -> str:
     if latency == 1:
-        primitive_register = "true"
+        primitive_register = "false"
         core_register = "false"
     elif latency == 2:
+        # The BRAM has a native synchronous read cycle.  Registering the
+        # primitive output adds the second cycle.  Registering the core output
+        # as well creates an additional cycle in the generated IP.
         primitive_register = "true"
-        core_register = "true"
+        core_register = "false"
     else:
         raise ValueError("this generator supports only one- or two-cycle latency")
 
-    return f'''\n# {module_name}: {coe.name}\ncreate_ip -name blk_mem_gen \\
+    return f'''\n# {module_name}: {coe.name}
+if {{[llength [get_ips -quiet {module_name}]] != 0}} {{
+    delete_ip [get_ips {module_name}]
+}}
+create_ip -name blk_mem_gen \\
     -vendor xilinx.com -library ip -version 8.4 \\
     -module_name {module_name}\n\nset_property -dict [list \\
     CONFIG.Memory_Type {{Single_Port_RAM}} \\
@@ -87,42 +83,46 @@ def main() -> None:
         parser.error("--latency must be at least 1")
 
     generated = args.generated_dir.resolve()
-    split_root = generated / "bram_split"
     flat_coe_root = generated / "coe"
     commands = [
         "# Generated MicroGPT BRAM configuration",
         "# Run this file from the Vivado project Tcl console.",
         "set_msg_config -id {IP_Flow 19-3656} -suppress",
+        "",
+        "# Remove old distributed BRAM instances from the previous design.",
+        "foreach old_ip [get_ips -quiet] {",
+        "    set old_name [get_property NAME $old_ip]",
+        "    if {[regexp {^blk_mem_gen_(q|k|v|wo|fc1|fc2|lm)_[0-9]+$} $old_name]} {",
+        "        delete_ip $old_ip",
+        "    }",
+        "}",
     ]
 
-    # The current embedding_bram_reader uses flat row-major embedding BRAMs.
-    embeddings = [
+    # The inference design uses one flat row-major BRAM per stored file.
+    brams = [
         ("blk_mem_gen_0", flat_coe_root / "wte_q12.coe"),
         ("blk_mem_gen_1", flat_coe_root / "wpe_q12.coe"),
+        ("blk_mem_gen_q", flat_coe_root / "layer0_attn_wq_q12.coe"),
+        ("blk_mem_gen_k", flat_coe_root / "layer0_attn_wk_q12.coe"),
+        ("blk_mem_gen_v", flat_coe_root / "layer0_attn_wv_q12.coe"),
+        ("blk_mem_gen_wo", flat_coe_root / "layer0_attn_wo_q12.coe"),
+        ("blk_mem_gen_fc1", flat_coe_root / "layer0_mlp_fc1_q12.coe"),
+        ("blk_mem_gen_fc2", flat_coe_root / "layer0_mlp_fc2_q12.coe"),
+        ("blk_mem_gen_lm", flat_coe_root / "lm_head_q12.coe"),
     ]
-    for module_name, coe in embeddings:
+    for module_name, coe in brams:
         if not coe.is_file():
             raise FileNotFoundError(
-                f"missing {coe}; convert wte_q12.hex and wpe_q12.hex to COE first"
+                f"missing flat COE file: {coe}"
             )
         commands.append(ip_tcl(module_name, coe, coe_depth(coe), args.latency))
-
-    for directory_name, prefix in LAYER_PREFIXES.items():
-        layer_dir = split_root / directory_name
-        coes = sorted(layer_dir.glob("*.coe"))
-        if not coes:
-            raise FileNotFoundError(f"no split COE files found in {layer_dir}")
-
-        for index, coe in enumerate(coes):
-            module_name = f"blk_mem_gen_{prefix}_{index}"
-            commands.append(ip_tcl(module_name, coe, coe_depth(coe), args.latency))
 
     commands.append("\nupdate_compile_order -fileset sources_1")
     commands.append('puts "MicroGPT BRAM IP generation complete."')
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text("\n".join(commands) + "\n", encoding="ascii")
-    print(f"wrote {args.output} with Vivado commands for all BRAMs")
+    print(f"wrote {args.output} with Vivado commands for {len(brams)} flat BRAMs")
 
 
 if __name__ == "__main__":

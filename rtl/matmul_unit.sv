@@ -30,7 +30,7 @@ module matmul_unit #(
     localparam logic signed [ACC_WIDTH-1:0] DATA_MIN =
         {{(ACC_WIDTH-DATA_WIDTH){1'b1}}, 1'b1, {(DATA_WIDTH-1){1'b0}}};
 
-    typedef enum logic [1:0] {ST_IDLE, ST_LOAD, ST_RUN} state_t;
+    typedef enum logic [2:0] {ST_IDLE, ST_LOAD, ST_RUN, ST_WRITE, ST_DONE} state_t;
     state_t state;
     logic [K_WIDTH-1:0] k_idx;
     logic [OUT_WIDTH-1:0] output_base;
@@ -43,6 +43,42 @@ module matmul_unit #(
     logic signed [M*K*DATA_WIDTH-1:0] matrix_a_reg;
     logic signed [K*N*DATA_WIDTH-1:0] matrix_b_reg;
 
+    // Eight partitioned views of matrix A for waveform inspection.
+    localparam int A_PART_ROWS = (M + 7) / 8;
+    localparam int A_PART_WIDTH = A_PART_ROWS * K * DATA_WIDTH;
+    (* keep = "true" *) logic signed [A_PART_WIDTH-1:0] matrix_a_part0;
+    (* keep = "true" *) logic signed [A_PART_WIDTH-1:0] matrix_a_part1;
+    (* keep = "true" *) logic signed [A_PART_WIDTH-1:0] matrix_a_part2;
+    (* keep = "true" *) logic signed [A_PART_WIDTH-1:0] matrix_a_part3;
+    (* keep = "true" *) logic signed [A_PART_WIDTH-1:0] matrix_a_part4;
+    (* keep = "true" *) logic signed [A_PART_WIDTH-1:0] matrix_a_part5;
+    (* keep = "true" *) logic signed [A_PART_WIDTH-1:0] matrix_a_part6;
+    (* keep = "true" *) logic signed [A_PART_WIDTH-1:0] matrix_a_part7;
+
+    always_comb begin
+        matrix_a_part0 = '0;
+        matrix_a_part1 = '0;
+        matrix_a_part2 = '0;
+        matrix_a_part3 = '0;
+        matrix_a_part4 = '0;
+        matrix_a_part5 = '0;
+        matrix_a_part6 = '0;
+        matrix_a_part7 = '0;
+        for (int row = 0; row < M; row++) begin
+            case (row / A_PART_ROWS)
+                0: matrix_a_part0[(row % A_PART_ROWS)*K*DATA_WIDTH +: K*DATA_WIDTH] = matrix_a_reg[row*K*DATA_WIDTH +: K*DATA_WIDTH];
+                1: matrix_a_part1[(row % A_PART_ROWS)*K*DATA_WIDTH +: K*DATA_WIDTH] = matrix_a_reg[row*K*DATA_WIDTH +: K*DATA_WIDTH];
+                2: matrix_a_part2[(row % A_PART_ROWS)*K*DATA_WIDTH +: K*DATA_WIDTH] = matrix_a_reg[row*K*DATA_WIDTH +: K*DATA_WIDTH];
+                3: matrix_a_part3[(row % A_PART_ROWS)*K*DATA_WIDTH +: K*DATA_WIDTH] = matrix_a_reg[row*K*DATA_WIDTH +: K*DATA_WIDTH];
+                4: matrix_a_part4[(row % A_PART_ROWS)*K*DATA_WIDTH +: K*DATA_WIDTH] = matrix_a_reg[row*K*DATA_WIDTH +: K*DATA_WIDTH];
+                5: matrix_a_part5[(row % A_PART_ROWS)*K*DATA_WIDTH +: K*DATA_WIDTH] = matrix_a_reg[row*K*DATA_WIDTH +: K*DATA_WIDTH];
+                6: matrix_a_part6[(row % A_PART_ROWS)*K*DATA_WIDTH +: K*DATA_WIDTH] = matrix_a_reg[row*K*DATA_WIDTH +: K*DATA_WIDTH];
+                7: matrix_a_part7[(row % A_PART_ROWS)*K*DATA_WIDTH +: K*DATA_WIDTH] = matrix_a_reg[row*K*DATA_WIDTH +: K*DATA_WIDTH];
+                default: begin end
+            endcase
+        end
+    end
+
     function automatic logic signed [DATA_WIDTH-1:0] get_a(
         input int output_index,
         input int k_index
@@ -50,7 +86,17 @@ module matmul_unit #(
         int row_index;
         begin
             row_index = output_index / N;
-            get_a = matrix_a_reg[((row_index*K + k_index) * DATA_WIDTH) +: DATA_WIDTH];
+            case (row_index / A_PART_ROWS)
+                0: get_a = matrix_a_part0[((row_index % A_PART_ROWS)*K + k_index)*DATA_WIDTH +: DATA_WIDTH];
+                1: get_a = matrix_a_part1[((row_index % A_PART_ROWS)*K + k_index)*DATA_WIDTH +: DATA_WIDTH];
+                2: get_a = matrix_a_part2[((row_index % A_PART_ROWS)*K + k_index)*DATA_WIDTH +: DATA_WIDTH];
+                3: get_a = matrix_a_part3[((row_index % A_PART_ROWS)*K + k_index)*DATA_WIDTH +: DATA_WIDTH];
+                4: get_a = matrix_a_part4[((row_index % A_PART_ROWS)*K + k_index)*DATA_WIDTH +: DATA_WIDTH];
+                5: get_a = matrix_a_part5[((row_index % A_PART_ROWS)*K + k_index)*DATA_WIDTH +: DATA_WIDTH];
+                6: get_a = matrix_a_part6[((row_index % A_PART_ROWS)*K + k_index)*DATA_WIDTH +: DATA_WIDTH];
+                7: get_a = matrix_a_part7[((row_index % A_PART_ROWS)*K + k_index)*DATA_WIDTH +: DATA_WIDTH];
+                default: get_a = '0;
+            endcase
         end
     endfunction
 
@@ -129,26 +175,43 @@ module matmul_unit #(
 
                 ST_RUN: begin
                     if (int'(k_idx) == K - 1) begin
+                        // Complete the accumulation first.  The output is
+                        // written in ST_WRITE on the following clock so the
+                        // full accumulator value is stable and observable.
                         for (int lane = 0; lane < LANES; lane++) begin
-                            if ((int'(output_base) + lane) < OUTPUTS) begin
-                                matrix_c[((int'(output_base) + lane) * DATA_WIDTH) +: DATA_WIDTH]
-                                    <= sat_data((lane_acc[lane] + lane_product[lane]) >>> FRAC_BITS);
-                            end
-                            lane_acc[lane] <= '0;
+                            lane_acc[lane] <= lane_acc[lane] + lane_product[lane];
                         end
-
-                        if ((int'(output_base) + LANES) >= OUTPUTS) begin
-                            state <= ST_IDLE;
-                            valid_out <= 1'b1;
-                        end else begin
-                            output_base <= OUT_WIDTH'(int'(output_base) + LANES);
-                            k_idx <= '0;
-                        end
+                        state <= ST_WRITE;
                     end else begin
                         for (int lane = 0; lane < LANES; lane++)
                             lane_acc[lane] <= lane_acc[lane] + lane_product[lane];
                         k_idx <= k_idx + 1'b1;
                     end
+                end
+
+                ST_WRITE: begin
+                    for (int lane = 0; lane < LANES; lane++) begin
+                        if ((int'(output_base) + lane) < OUTPUTS) begin
+                            matrix_c[((int'(output_base) + lane) * DATA_WIDTH) +: DATA_WIDTH]
+                                <= sat_data(lane_acc[lane] >>> FRAC_BITS);
+                        end
+                        lane_acc[lane] <= '0;
+                    end
+
+                    if ((int'(output_base) + LANES) >= OUTPUTS) begin
+                        state <= ST_DONE;
+                    end else begin
+                        output_base <= OUT_WIDTH'(int'(output_base) + LANES);
+                        k_idx <= '0;
+                        state <= ST_RUN;
+                    end
+                end
+
+                ST_DONE: begin
+                    // matrix_c was written in the previous state and is
+                    // stable before valid_out is presented to the consumer.
+                    valid_out <= 1'b1;
+                    state <= ST_IDLE;
                 end
 
                 default: begin

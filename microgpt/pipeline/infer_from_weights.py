@@ -83,19 +83,40 @@ def run_step(
     pos_id: int,
     keys: list[list[float]],
     values: list[list[float]],
+    trace: dict[str, list[float]] | None = None,
 ) -> tuple[list[float], list[list[float]], list[list[float]]]:
-    x = [a + b for a, b in zip(weights["wte"][token_id], weights["wpe"][pos_id])]
-    x = rmsnorm(x)
+    token_embedding = weights["wte"][token_id].copy()
+    position_embedding = weights["wpe"][pos_id].copy()
+    embedding = [a + b for a, b in zip(token_embedding, position_embedding)]
+    x = rmsnorm(embedding)
 
-    residual = x
+    if trace is not None:
+        trace["token_embedding"] = token_embedding
+        trace["position_embedding"] = position_embedding
+        trace["embedding"] = embedding
+        trace["rms0"] = x.copy()
+
+    attn_residual = x.copy()
     normalized = rmsnorm(x)
+    if trace is not None:
+        trace["attn_rmsnorm"] = normalized.copy()
+
     query = linear(normalized, weights["wq"])
     key = linear(normalized, weights["wk"])
     value = linear(normalized, weights["wv"])
     keys = keys + [key]
     values = values + [value]
 
+    if trace is not None:
+        trace["q"] = query.copy()
+        trace["k"] = key.copy()
+        trace["v"] = value.copy()
+        trace["kv_keys"] = [element for saved_key in keys for element in saved_key]
+        trace["kv_values"] = [element for saved_value in values for element in saved_value]
+
     context: list[float] = []
+    all_scores: list[float] = []
+    all_probabilities: list[float] = []
     for head in range(N_HEAD):
         begin = head * HEAD_DIM
         end = begin + HEAD_DIM
@@ -106,21 +127,67 @@ def run_step(
             for saved_key in keys
         ]
         probabilities = softmax(scores)
+        all_scores.extend(scores)
+        all_probabilities.extend(probabilities)
         context.extend(
             sum(probabilities[t] * values[t][begin + i] for t in range(len(values)))
             for i in range(HEAD_DIM)
         )
 
-    x = linear(context, weights["wo"])
-    x = [a + b for a, b in zip(x, residual)]
+    wo = linear(context, weights["wo"])
+    attn_output = [a + b for a, b in zip(wo, attn_residual)]
 
-    residual = x
-    x = rmsnorm(x)
-    x = [max(0.0, value) for value in linear(x, weights["fc1"])]
-    x = linear(x, weights["fc2"])
-    x = [a + b for a, b in zip(x, residual)]
+    if trace is not None:
+        trace["attention_logits"] = all_scores
+        trace["attention_probs"] = all_probabilities
+        trace["attention_context"] = context.copy()
+        trace["wo"] = wo.copy()
+        trace["attention_residual"] = attn_output.copy()
 
-    return linear(x, weights["lm"]), keys, values
+    mlp_residual = attn_output.copy()
+    mlp_norm = rmsnorm(attn_output)
+    fc1 = linear(mlp_norm, weights["fc1"])
+    fc1_relu = [max(0.0, value) for value in fc1]
+    fc2 = linear(fc1_relu, weights["fc2"])
+    mlp_output = [a + b for a, b in zip(fc2, mlp_residual)]
+
+    if trace is not None:
+        trace["mlp_rmsnorm"] = mlp_norm.copy()
+        trace["fc1"] = fc1.copy()
+        trace["fc1_relu"] = fc1_relu.copy()
+        trace["fc2"] = fc2.copy()
+        trace["mlp_residual"] = mlp_output.copy()
+
+    logits = linear(mlp_output, weights["lm"])
+    if trace is not None:
+        trace["lm_logits"] = logits.copy()
+
+    return logits, keys, values
+
+
+def write_trace(trace_dir: Path, trace: dict[str, list[float]]) -> None:
+    """Write every traced vector as readable text and Q4.12 memory data."""
+    trace_dir.mkdir(parents=True, exist_ok=True)
+
+    for name, vector in trace.items():
+        (trace_dir / f"{name}.txt").write_text(
+            " ".join(f"{value:.10f}" for value in vector) + "\n",
+            encoding="ascii",
+        )
+        (trace_dir / f"{name}.mem").write_text(
+            "\n".join(f"{q12_bits(value)[1]:04x}" for value in vector) + "\n",
+            encoding="ascii",
+        )
+
+
+def print_trace(trace: dict[str, list[float]]) -> None:
+    """Print compact Q4.12 values in pipeline order."""
+    for name, vector in trace.items():
+        values = " ".join(
+            f"0x{q12_bits(value)[1]:04x}({q12_bits(value)[0]})" for value in vector
+        )
+        print(f"{name}:")
+        print(f"  {values}")
 
 
 def main() -> None:
@@ -138,6 +205,12 @@ def main() -> None:
         nargs="*",
         default=[],
         help="Earlier tokens used to build the KV cache before the requested step",
+    )
+    parser.add_argument(
+        "--dump-dir",
+        type=Path,
+        default=Path("generated/reference/intermediates"),
+        help="Directory for intermediate .txt and Q4.12 .mem files",
     )
     args = parser.parse_args()
 
@@ -157,8 +230,13 @@ def main() -> None:
             parser.error(f"context token {context_token} is outside [0, {VOCAB_SIZE - 1}]")
         _, keys, values = run_step(weights, context_token, position, keys, values)
 
-    logits, _, _ = run_step(weights, args.token_id, args.pos_id, keys, values)
+    trace: dict[str, list[float]] = {}
+    logits, _, _ = run_step(
+        weights, args.token_id, args.pos_id, keys, values, trace=trace
+    )
     next_token = max(range(VOCAB_SIZE), key=logits.__getitem__)
+
+    write_trace(args.dump_dir, trace)
 
     print(f"input token : {args.token_id}")
     print(f"input pos   : {args.pos_id}")
@@ -168,6 +246,8 @@ def main() -> None:
     print(" ".join(f"{value:.8f}" for value in logits))
     print("logits Q4.12:")
     print(" ".join(f"0x{q12_bits(value)[1]:04x}({q12_bits(value)[0]})" for value in logits))
+    print(f"intermediates: {args.dump_dir}")
+    print_trace(trace)
 
 
 if __name__ == "__main__":

@@ -31,15 +31,9 @@ def write_mem(path: Path, values: list[int]) -> None:
     path.write_text("\n".join(hex16(value) for value in values) + "\n", encoding="ascii")
 
 
-def write_coe(path: Path, values: list[int], depth: int | None = None) -> None:
+def write_coe(path: Path, values: list[int]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    coe_values = list(values)
-    if depth is not None:
-        if len(coe_values) > depth:
-            raise ValueError("COE data contains more values than the requested depth")
-        coe_values.extend([0] * (depth - len(coe_values)))
-
-    entries = ",\n".join(f"{hex16(value)}" for value in coe_values)
+    entries = ",\n".join(f"{hex16(value)}" for value in values)
     path.write_text(
         "memory_initialization_radix=16;\n"
         "memory_initialization_vector=\n"
@@ -90,7 +84,6 @@ def write_split_bram_files(
     m: int,
     k: int,
     n: int,
-    bram_depth: int,
 ) -> None:
     """Write one BRAM initialization file per A row and B column.
 
@@ -113,7 +106,7 @@ def write_split_bram_files(
     manifest = [
         f"A BRAM files: {m} (one per A row), {k} values per file",
         f"B BRAM files: {n} (one per B column), {k} values per file",
-        "Split BRAM files are not padded; configure each BRAM for its listed depth.",
+        "Split BRAM files contain only their listed values; configure each BRAM for that depth.",
         "",
         "A file mapping:",
         *[f"a_row_{row}: A[{row}][0:{k - 1}]" for row in range(m)],
@@ -142,12 +135,6 @@ def main() -> None:
     parser.add_argument("--k", type=int, default=3, help="Columns of A / rows of B.")
     parser.add_argument("--n", type=int, default=2, help="Columns of matrix B / C.")
     parser.add_argument("--outdir", default="generated/matmul", help="Output directory.")
-    parser.add_argument(
-        "--bram-depth",
-        type=int,
-        default=32,
-        help="Number of entries to initialize in the A/B COE files.",
-    )
     parser.add_argument("--seed", type=int, default=1, help="Random seed.")
     parser.add_argument(
         "--max-abs",
@@ -159,8 +146,6 @@ def main() -> None:
 
     if args.m <= 0 or args.k <= 0 or args.n <= 0:
         raise ValueError("matrix dimensions must be positive")
-    if args.bram_depth <= 0:
-        raise ValueError("--bram-depth must be positive")
     if args.max_abs < 0 or args.max_abs > 7.999:
         raise ValueError("--max-abs should be in range 0..7.999 for signed Q4.12")
 
@@ -170,17 +155,14 @@ def main() -> None:
     a = [random_q12(rng, args.max_abs) for _ in range(args.m * args.k)]
     b = [random_q12(rng, args.max_abs) for _ in range(args.k * args.n)]
     c = matmul_q12(a, b, args.m, args.k, args.n)
-    if args.bram_depth < max(len(a), len(b)):
-        raise ValueError("--bram-depth is smaller than matrix A or B")
-
     write_mem(outdir / "mat_a.mem", a)
     write_mem(outdir / "mat_b.mem", b)
     write_mem(outdir / "mat_c_expected.mem", c)
-    write_coe(outdir / "mat_a.coe", a, args.bram_depth)
-    write_coe(outdir / "mat_b.coe", b, args.bram_depth)
+    write_coe(outdir / "mat_a.coe", a)
+    write_coe(outdir / "mat_b.coe", b)
     write_coe(outdir / "mat_c_expected.coe", c)
     write_float_report(outdir / "matrices_float.txt", a, b, c, args.m, args.k, args.n)
-    write_split_bram_files(outdir, a, b, args.m, args.k, args.n, args.bram_depth)
+    write_split_bram_files(outdir, a, b, args.m, args.k, args.n)
 
     print(f"wrote {outdir / 'mat_a.mem'}")
     print(f"wrote {outdir / 'mat_b.mem'}")
