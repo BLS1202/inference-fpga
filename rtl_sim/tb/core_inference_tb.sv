@@ -22,6 +22,7 @@ module core_inference_tb #(
     logic [VOCAB_SIZE*DATA_WIDTH-1:0] probs_out;
     logic [TOKEN_WIDTH-1:0] next_token;
     logic end_token;
+    logic [5:0] debug_state;
 
     logic [TOKEN_WIDTH-1:0] input_tokens [0:NUM_TOKENS-1];
     string token_file;
@@ -48,7 +49,8 @@ module core_inference_tb #(
         .logits_out(logits_out),
         .probs_out(probs_out),
         .next_token(next_token),
-        .end_token(end_token)
+        .end_token(end_token),
+        .debug_state(debug_state)
     );
 
     initial begin

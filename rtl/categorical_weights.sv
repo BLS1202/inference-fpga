@@ -77,9 +77,7 @@ module categorical_weights #(
             exp_lut_addr_reg <= '0;
             exp_value_reg <= '0;
             weights <= '0;
-            valid_out <= 1'b0;
         end else begin
-            valid_out <= 1'b0;
             case (state)
                 ST_IDLE: begin
                     if (start) begin
@@ -122,7 +120,6 @@ module categorical_weights #(
                     end
                 end
                 ST_DONE: begin
-                    valid_out <= 1'b1;
                     state <= ST_IDLE;
                 end
                 default: state <= ST_IDLE;

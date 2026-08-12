@@ -35,6 +35,7 @@ module nexys_a7_inference_top #(
     logic [VOCAB_SIZE*DATA_WIDTH-1:0] probs_out;
     logic [TOKEN_WIDTH-1:0] next_token;
     logic end_token;
+    logic [5:0] core_debug_state;
 
     always_ff @(posedge CLK100MHZ or posedge sw[1]) begin
         if (sw[1]) begin
@@ -101,7 +102,8 @@ module nexys_a7_inference_top #(
         .logits_out     (logits_out),
         .probs_out      (probs_out),
         .next_token     (next_token),
-        .end_token      (end_token)
+        .end_token      (end_token),
+        .debug_state    (core_debug_state)
     );
 
     always_comb begin

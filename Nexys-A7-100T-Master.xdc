@@ -80,7 +80,7 @@ set_property -dict {PACKAGE_PIN U13 IOSTANDARD LVCMOS33} [get_ports {an[7]}]
 
 #set_property -dict { PACKAGE_PIN C12   IOSTANDARD LVCMOS33 } [get_ports { CPU_RESETN }]; #IO_L3P_T0_DQS_AD1P_15 Sch=cpu_resetn
 
-#set_property -dict { PACKAGE_PIN N17   IOSTANDARD LVCMOS33 } [get_ports { BTNC }]; #IO_L9P_T1_DQS_14 Sch=btnc
+set_property -dict {PACKAGE_PIN N17 IOSTANDARD LVCMOS33} [get_ports btnc]
 #set_property -dict { PACKAGE_PIN M18   IOSTANDARD LVCMOS33 } [get_ports { BTNU }]; #IO_L4N_T0_D05_14 Sch=btnu
 #set_property -dict { PACKAGE_PIN P17   IOSTANDARD LVCMOS33 } [get_ports { BTNL }]; #IO_L12P_T1_MRCC_14 Sch=btnl
 #set_property -dict { PACKAGE_PIN M17   IOSTANDARD LVCMOS33 } [get_ports { BTNR }]; #IO_L10N_T1_D15_14 Sch=btnr
@@ -215,7 +215,7 @@ set_property -dict {PACKAGE_PIN U13 IOSTANDARD LVCMOS33} [get_ports {an[7]}]
 
 ##USB-RS232 Interface
 
-#set_property -dict { PACKAGE_PIN C4    IOSTANDARD LVCMOS33 } [get_ports { UART_TXD_IN }]; #IO_L7P_T1_AD6P_35 Sch=uart_txd_in
+set_property -dict {PACKAGE_PIN C4 IOSTANDARD LVCMOS33} [get_ports UART_TXD_IN]
 set_property -dict {PACKAGE_PIN D4 IOSTANDARD LVCMOS33} [get_ports UART_RXD_OUT]
 #set_property -dict { PACKAGE_PIN D3    IOSTANDARD LVCMOS33 } [get_ports { UART_CTS }]; #IO_L12N_T1_MRCC_35 Sch=uart_cts
 #set_property -dict { PACKAGE_PIN E5    IOSTANDARD LVCMOS33 } [get_ports { UART_RTS }]; #IO_L5N_T0_AD13N_35 Sch=uart_rts
@@ -250,5 +250,45 @@ set_property -dict {PACKAGE_PIN D4 IOSTANDARD LVCMOS33} [get_ports UART_RXD_OUT]
 #set_property -dict { PACKAGE_PIN M14   IOSTANDARD LVCMOS33 } [get_ports { QSPI_DQ[3] }]; #IO_L2N_T0_D03_14 Sch=qspi_dq[3]
 #set_property -dict { PACKAGE_PIN L13   IOSTANDARD LVCMOS33 } [get_ports { QSPI_CSN }]; #IO_L6P_T0_FCS_B_14 Sch=qspi_csn
 
-create_clock -period 20.000 -name CLK100MHZ -waveform {0.000 10.000} -add [get_ports CLK100MHZ]
+create_clock -period 10.000 -name CLK100MHZ [get_ports CLK100MHZ]
 
+
+set_property MARK_DEBUG true [get_nets {inference_i/FSM_sequential_state_reg[2]}]
+set_property MARK_DEBUG true [get_nets {inference_i/FSM_sequential_state_reg[0]}]
+set_property MARK_DEBUG true [get_nets {inference_i/final_weights_i/state[0]}]
+set_property MARK_DEBUG true [get_nets {inference_i/final_weights_i/state[1]}]
+set_property MARK_DEBUG true [get_nets {inference_i/final_weights_i/state[2]}]
+set_property MARK_DEBUG true [get_nets {inference_i/final_weights_i/index_reg_n_0_[0]}]
+set_property MARK_DEBUG true [get_nets {inference_i/final_weights_i/index_reg_n_0_[1]}]
+set_property MARK_DEBUG true [get_nets {inference_i/final_weights_i/index_reg_n_0_[2]}]
+set_property MARK_DEBUG true [get_nets {inference_i/final_weights_i/index_reg_n_0_[3]}]
+set_property MARK_DEBUG true [get_nets {inference_i/final_weights_i/index_reg_n_0_[4]}]
+connect_debug_port u_ila_0/probe2 [get_nets [list {inference_i/FSM_sequential_state_reg[2]}]]
+connect_debug_port u_ila_0/probe3 [get_nets [list {inference_i/final_weights_i/index_reg_n_0_[0]}]]
+connect_debug_port u_ila_0/probe4 [get_nets [list {inference_i/final_weights_i/index_reg_n_0_[1]}]]
+connect_debug_port u_ila_0/probe5 [get_nets [list {inference_i/final_weights_i/index_reg_n_0_[2]}]]
+connect_debug_port u_ila_0/probe6 [get_nets [list {inference_i/final_weights_i/index_reg_n_0_[3]}]]
+connect_debug_port u_ila_0/probe7 [get_nets [list {inference_i/final_weights_i/index_reg_n_0_[4]}]]
+
+create_debug_core u_ila_0 ila
+set_property ALL_PROBE_SAME_MU true [get_debug_cores u_ila_0]
+set_property ALL_PROBE_SAME_MU_CNT 1 [get_debug_cores u_ila_0]
+set_property C_ADV_TRIGGER false [get_debug_cores u_ila_0]
+set_property C_DATA_DEPTH 1024 [get_debug_cores u_ila_0]
+set_property C_EN_STRG_QUAL false [get_debug_cores u_ila_0]
+set_property C_INPUT_PIPE_STAGES 0 [get_debug_cores u_ila_0]
+set_property C_TRIGIN_EN false [get_debug_cores u_ila_0]
+set_property C_TRIGOUT_EN false [get_debug_cores u_ila_0]
+set_property port_width 1 [get_debug_ports u_ila_0/clk]
+connect_debug_port u_ila_0/clk [get_nets [list clk_wiz_i/inst/clk_out1]]
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe0]
+set_property port_width 3 [get_debug_ports u_ila_0/probe0]
+connect_debug_port u_ila_0/probe0 [get_nets [list {inference_i/final_weights_i/state[0]} {inference_i/final_weights_i/state[1]} {inference_i/final_weights_i/state[2]}]]
+create_debug_port u_ila_0 probe
+set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe1]
+set_property port_width 1 [get_debug_ports u_ila_0/probe1]
+connect_debug_port u_ila_0/probe1 [get_nets [list {inference_i/FSM_sequential_state_reg[0]}]]
+set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
+set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
+set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]
+connect_debug_port dbg_hub/clk [get_nets clk_50mhz]

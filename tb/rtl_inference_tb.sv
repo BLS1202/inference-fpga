@@ -28,6 +28,7 @@ module rtl_inference_tb #(
     logic [VOCAB_SIZE*DATA_WIDTH-1:0] probs_out;
     logic [TOKEN_WIDTH-1:0] next_token;
     logic end_token;
+    logic [5:0] debug_state;
 
     initial begin
         clk = 1'b0;
@@ -54,7 +55,8 @@ module rtl_inference_tb #(
         .logits_out     (logits_out),
         .probs_out      (probs_out),
         .next_token     (next_token),
-        .end_token      (end_token)
+        .end_token      (end_token),
+        .debug_state    (debug_state)
     );
 
     initial begin
@@ -78,6 +80,7 @@ module rtl_inference_tb #(
         for (int i = 0; i < NUM_TOKENS; i++) begin
             @(negedge clk);
             start = 1'b1;
+            @(negedge clk);
             @(negedge clk);
             start = 1'b0;
 

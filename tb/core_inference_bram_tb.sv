@@ -25,6 +25,7 @@ module core_inference_bram_tb;
     logic [VOCAB_SIZE*DATA_WIDTH-1:0] probs_out;
     logic [TOKEN_WIDTH-1:0] next_token;
     logic end_token;
+    logic [5:0] debug_state;
 
     // 100 MHz simulation clock.
     initial begin
@@ -52,7 +53,8 @@ module core_inference_bram_tb;
         .logits_out    (logits_out),
         .probs_out     (probs_out),
         .next_token    (next_token),
-        .end_token     (end_token)
+        .end_token     (end_token),
+        .debug_state   (debug_state)
     );
 
     initial begin

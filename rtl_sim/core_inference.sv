@@ -91,7 +91,10 @@ module top_inference #(
     output logic [TOKEN_WIDTH-1:0] next_token,
 
     // High when next_token is BOS/end token.
-    output logic end_token
+    output logic end_token,
+
+    // Current core FSM state for hardware/debug display.
+    output logic [5:0] debug_state
 );
 
 
@@ -183,6 +186,23 @@ module top_inference #(
 
     logic signed [BLOCK_SIZE*N_EMBD*DATA_WIDTH-1:0] keys_cache;
     logic signed [BLOCK_SIZE*N_EMBD*DATA_WIDTH-1:0] values_cache;
+    localparam int CACHE_PART_WIDTH = (BLOCK_SIZE*N_EMBD*DATA_WIDTH) / 8;
+    (* keep = "true" *) logic signed [CACHE_PART_WIDTH-1:0] k_cache_p0;
+    (* keep = "true" *) logic signed [CACHE_PART_WIDTH-1:0] k_cache_p1;
+    (* keep = "true" *) logic signed [CACHE_PART_WIDTH-1:0] k_cache_p2;
+    (* keep = "true" *) logic signed [CACHE_PART_WIDTH-1:0] k_cache_p3;
+    (* keep = "true" *) logic signed [CACHE_PART_WIDTH-1:0] k_cache_p4;
+    (* keep = "true" *) logic signed [CACHE_PART_WIDTH-1:0] k_cache_p5;
+    (* keep = "true" *) logic signed [CACHE_PART_WIDTH-1:0] k_cache_p6;
+    (* keep = "true" *) logic signed [CACHE_PART_WIDTH-1:0] k_cache_p7;
+    (* keep = "true" *) logic signed [CACHE_PART_WIDTH-1:0] v_cache_p0;
+    (* keep = "true" *) logic signed [CACHE_PART_WIDTH-1:0] v_cache_p1;
+    (* keep = "true" *) logic signed [CACHE_PART_WIDTH-1:0] v_cache_p2;
+    (* keep = "true" *) logic signed [CACHE_PART_WIDTH-1:0] v_cache_p3;
+    (* keep = "true" *) logic signed [CACHE_PART_WIDTH-1:0] v_cache_p4;
+    (* keep = "true" *) logic signed [CACHE_PART_WIDTH-1:0] v_cache_p5;
+    (* keep = "true" *) logic signed [CACHE_PART_WIDTH-1:0] v_cache_p6;
+    (* keep = "true" *) logic signed [CACHE_PART_WIDTH-1:0] v_cache_p7;
 
     logic signed [N_HEAD*BLOCK_SIZE*DATA_WIDTH-1:0] attn_logits;
     logic [N_HEAD*BLOCK_SIZE*DATA_WIDTH-1:0] attn_probs;
@@ -353,6 +373,23 @@ module top_inference #(
 
     assign busy = (state != ST_IDLE);
     assign valid_out = (state == ST_DONE);
+    assign k_cache_p0 = keys_cache[0*CACHE_PART_WIDTH +: CACHE_PART_WIDTH];
+    assign k_cache_p1 = keys_cache[1*CACHE_PART_WIDTH +: CACHE_PART_WIDTH];
+    assign k_cache_p2 = keys_cache[2*CACHE_PART_WIDTH +: CACHE_PART_WIDTH];
+    assign k_cache_p3 = keys_cache[3*CACHE_PART_WIDTH +: CACHE_PART_WIDTH];
+    assign k_cache_p4 = keys_cache[4*CACHE_PART_WIDTH +: CACHE_PART_WIDTH];
+    assign k_cache_p5 = keys_cache[5*CACHE_PART_WIDTH +: CACHE_PART_WIDTH];
+    assign k_cache_p6 = keys_cache[6*CACHE_PART_WIDTH +: CACHE_PART_WIDTH];
+    assign k_cache_p7 = keys_cache[7*CACHE_PART_WIDTH +: CACHE_PART_WIDTH];
+    assign v_cache_p0 = values_cache[0*CACHE_PART_WIDTH +: CACHE_PART_WIDTH];
+    assign v_cache_p1 = values_cache[1*CACHE_PART_WIDTH +: CACHE_PART_WIDTH];
+    assign v_cache_p2 = values_cache[2*CACHE_PART_WIDTH +: CACHE_PART_WIDTH];
+    assign v_cache_p3 = values_cache[3*CACHE_PART_WIDTH +: CACHE_PART_WIDTH];
+    assign v_cache_p4 = values_cache[4*CACHE_PART_WIDTH +: CACHE_PART_WIDTH];
+    assign v_cache_p5 = values_cache[5*CACHE_PART_WIDTH +: CACHE_PART_WIDTH];
+    assign v_cache_p6 = values_cache[6*CACHE_PART_WIDTH +: CACHE_PART_WIDTH];
+    assign v_cache_p7 = values_cache[7*CACHE_PART_WIDTH +: CACHE_PART_WIDTH];
+
     embedding_lookup #(
         .VOCAB_SIZE(VOCAB_SIZE),
         .BLOCK_SIZE(BLOCK_SIZE),
@@ -842,6 +879,7 @@ module top_inference #(
     assign probs_out = final_probs_vec;
     assign next_token = selected_token_reg;
     assign end_token = (selected_token_reg == TOKEN_WIDTH'(VOCAB_SIZE - 1));
+    assign debug_state = state;
 
     // Registered sequential argmax. This replaces the long combinational
     // priority-comparator chain with one comparison per clock.

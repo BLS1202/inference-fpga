@@ -18,7 +18,7 @@ VERILATOR_TRACE_FLAGS :=
 SIM_TRACE_ARGS :=
 endif
 
-.PHONY: sim-matmul sim-rmsnorm sim-softmax sim-core clean
+.PHONY: sim-matmul sim-rmsnorm sim-softmax sim-core sim-uart-echo sim-uart-core clean
 
 sim-matmul:
 	python scripts/generate_matrix.py --m $(M) --k $(K) --n $(N) --outdir $(MATMUL_OUTDIR)
@@ -92,6 +92,44 @@ sim-core:
 		$(RTL_DIR)/core_inference.sv \
 		tb/core_inference_tb.sv
 	$(BUILD_DIR)/core_inference_tb/Vcore_inference_tb \
+		+TOKENS=generated/reference/input_tokens.mem \
+		$(SIM_TRACE_ARGS)
+
+sim-uart-echo:
+	mkdir -p $(BUILD_DIR)/uart_echo_tb
+	$(VERILATOR) --binary -sv --timing \
+		$(VERILATOR_TRACE_FLAGS) \
+		--Mdir $(BUILD_DIR)/uart_echo_tb \
+		--top-module uart_echo_tb \
+		rtl/uart.sv \
+		tb/uart_echo_tb.sv
+	$(BUILD_DIR)/uart_echo_tb/Vuart_echo_tb \
+		$(SIM_TRACE_ARGS)
+
+sim-uart-core:
+	mkdir -p $(BUILD_DIR)/uart_core_inference_tb
+	$(VERILATOR) --binary -sv --timing \
+		$(VERILATOR_TRACE_FLAGS) \
+		--Mdir $(BUILD_DIR)/uart_core_inference_tb \
+		--top-module uart_core_inference_tb \
+		-GNUM_TOKENS=$(NUM_TOKENS) \
+		-GEXP_INIT_FILE=\"generated/softmax/exp_lut.mem\" \
+		rtl/uart.sv \
+		$(RTL_DIR)/fixed_point_utils.sv \
+		$(RTL_DIR)/bram_models.sv \
+		$(RTL_DIR)/embedding_lookup.sv \
+		$(RTL_DIR)/sqrt_engine.sv \
+		$(RTL_DIR)/rmsnorm.sv \
+		$(RTL_DIR)/matmul_unit.sv \
+		$(RTL_DIR)/relu.sv \
+		$(RTL_DIR)/bram_tile_reader.sv \
+		$(RTL_DIR)/attention_score.sv \
+		$(RTL_DIR)/attention_fused.sv \
+		$(RTL_DIR)/categorical_weights.sv \
+		$(RTL_DIR)/kv_cache.sv \
+		$(RTL_DIR)/core_inference.sv \
+		tb/uart_core_inference_tb.sv
+	$(BUILD_DIR)/uart_core_inference_tb/Vuart_core_inference_tb \
 		+TOKENS=generated/reference/input_tokens.mem \
 		$(SIM_TRACE_ARGS)
 
