@@ -2,7 +2,7 @@
 
 // Smoke test for the original rtl inference implementation.
 module rtl_inference_tb #(
-    parameter int NUM_TOKENS = 5
+    parameter int NUM_TOKENS = 16
 );
 
     localparam int VOCAB_SIZE = 27;
@@ -14,6 +14,7 @@ module rtl_inference_tb #(
     localparam int FRAC_BITS = 12;
     localparam int TOKEN_WIDTH = $clog2(VOCAB_SIZE);
     localparam int POS_WIDTH = $clog2(BLOCK_SIZE);
+    localparam int BOS_TOKEN = VOCAB_SIZE - 1;
 
     logic clk;
     logic rst_l;
@@ -66,8 +67,8 @@ module rtl_inference_tb #(
         rst_l = 1'b0;
         start = 1'b0;
         clear_kv_cache = 1'b0;
-        token_id = TOKEN_WIDTH'(0);
-        pos_id = POS_WIDTH'(1);
+        token_id = TOKEN_WIDTH'(5);
+        pos_id = '0;
 
         repeat (2) @(posedge clk);
         rst_l = 1'b1;
@@ -77,7 +78,7 @@ module rtl_inference_tb #(
         @(negedge clk);
         clear_kv_cache = 1'b0;
 
-        for (int i = 0; i < NUM_TOKENS; i++) begin
+        for (int i = 0; i < NUM_TOKENS && i < BLOCK_SIZE; i++) begin
             @(negedge clk);
             start = 1'b1;
             @(negedge clk);
@@ -85,12 +86,14 @@ module rtl_inference_tb #(
             start = 1'b0;
 
             @(posedge valid_out);
-            token_id = next_token;
-            if (pos_id == BLOCK_SIZE - 1) begin
-                pos_id = '0;
-            end else begin
-                pos_id = pos_id + 1'b1;
+            if (end_token || next_token == TOKEN_WIDTH'(BOS_TOKEN)) begin
+                break;
             end
+
+            token_id = next_token;
+            pos_id = pos_id + 1'b1;
+
+            @(posedge clk);
         end
 
         repeat (4) @(posedge clk);

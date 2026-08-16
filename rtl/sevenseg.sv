@@ -3,14 +3,14 @@
 module sevenseg (
     input  logic        clk,
     input  logic        rst_l,
-    input  logic [15:0] value,
+    input  logic [31:0] value,
     output logic [6:0]  seg,
     output logic        dp,
     output logic [7:0]  an
 );
 
     logic [17:0] refresh_count;
-    logic [1:0]  digit_select;
+    logic [2:0]  digit_select;
     logic [3:0]  digit_value;
 
     always_ff @(posedge clk or negedge rst_l) begin
@@ -20,25 +20,41 @@ module sevenseg (
             refresh_count <= refresh_count + 1'b1;
     end
 
-    assign digit_select = refresh_count[17:16];
+    assign digit_select = refresh_count[17:15];
 
     always_comb begin
         case (digit_select)
-            2'd0: begin
+            3'd0: begin
                 digit_value = value[3:0];
                 an = 8'b1111_1110;
             end
-            2'd1: begin
+            3'd1: begin
                 digit_value = value[7:4];
                 an = 8'b1111_1101;
             end
-            2'd2: begin
+            3'd2: begin
                 digit_value = value[11:8];
                 an = 8'b1111_1011;
             end
-            default: begin
+            3'd3: begin
                 digit_value = value[15:12];
                 an = 8'b1111_0111;
+            end
+            3'd4: begin
+                digit_value = value[19:16];
+                an = 8'b1110_1111;
+            end
+            3'd5: begin
+                digit_value = value[23:20];
+                an = 8'b1101_1111;
+            end
+            3'd6: begin
+                digit_value = value[27:24];
+                an = 8'b1011_1111;
+            end
+            default: begin
+                digit_value = value[31:28];
+                an = 8'b0111_1111;
             end
         endcase
 

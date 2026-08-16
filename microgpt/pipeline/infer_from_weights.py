@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import math
+import random
 from pathlib import Path
 
 FRAC_BITS = 12
@@ -59,6 +60,21 @@ def load_weights(directory: Path) -> dict[str, list[list[float]]]:
         name: load_matrix(directory / filename, rows, cols)
         for name, (filename, rows, cols) in specs.items()
     }
+
+
+def load_vocab(path: Path) -> tuple[list[str], int]:
+    docs = [line.strip() for line in path.read_text(encoding="ascii").splitlines()]
+    chars = sorted(set("".join(doc for doc in docs if doc)))
+    bos = len(chars)
+    if bos + 1 != VOCAB_SIZE:
+        raise ValueError(f"{path}: expected vocab size {VOCAB_SIZE}, got {bos + 1}")
+    return chars, bos
+
+
+def decode_token(token_id: int, chars: list[str], bos: int) -> str:
+    if token_id == bos:
+        return ""
+    return chars[token_id]
 
 
 def linear(vector: list[float], matrix: list[list[float]]) -> list[float]:
@@ -190,10 +206,83 @@ def print_trace(trace: dict[str, list[float]]) -> None:
         print(f"  {values}")
 
 
+def run_sample(
+    weights: dict[str, list[list[float]]],
+    chars: list[str],
+    bos: int,
+    generate: int,
+    temperature: float,
+) -> None:
+    keys: list[list[float]] = []
+    values: list[list[float]] = []
+    generated_tokens: list[int] = []
+    current_token = bos
+
+    for pos_id in range(min(generate, BLOCK_SIZE)):
+        logits, keys, values = run_step(
+            weights, current_token, pos_id, keys, values
+        )
+        probabilities = softmax([logit / temperature for logit in logits])
+        next_token = random.choices(range(VOCAB_SIZE), weights=probabilities)[0]
+        if next_token == bos:
+            break
+        generated_tokens.append(next_token)
+        current_token = next_token
+
+    print(
+        "".join(
+        decode_token(token_id, chars, bos) for token_id in generated_tokens
+        )
+    )
+
+
+def run_samples(
+    weights: dict[str, list[list[float]]],
+    chars: list[str],
+    bos: int,
+    samples: int,
+    generate: int,
+    temperature: float,
+) -> None:
+    print("--- inference (new, hallucinated names) ---")
+    for sample_idx in range(samples):
+        print(f"sample {sample_idx + 1:2d}: ", end="")
+        run_sample(weights, chars, bos, generate, temperature)
+
+
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Run one MicroGPT step from Q4.12 weights")
-    parser.add_argument("--token-id", type=int, required=True)
-    parser.add_argument("--pos-id", type=int, required=True)
+    parser = argparse.ArgumentParser(description="Run MicroGPT inference from Q4.12 weights")
+    parser.add_argument("--token-id", type=int)
+    parser.add_argument("--pos-id", type=int)
+    parser.add_argument(
+        "--sample",
+        action="store_true",
+        help="Generate names starting from the BOS token",
+    )
+    parser.add_argument(
+        "--samples",
+        type=int,
+        default=17,
+        help="Number of names to generate in --sample mode",
+    )
+    parser.add_argument(
+        "--generate",
+        type=int,
+        default=BLOCK_SIZE,
+        help="Maximum number of inference steps in --sample mode",
+    )
+    parser.add_argument(
+        "--temperature",
+        type=float,
+        default=0.5,
+        help="Sampling temperature in --sample mode",
+    )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=42,
+        help="Random seed used in --sample mode",
+    )
     parser.add_argument(
         "--weights",
         type=Path,
@@ -212,8 +301,42 @@ def main() -> None:
         default=Path("generated/reference/intermediates"),
         help="Directory for intermediate .txt and Q4.12 .mem files",
     )
+    parser.add_argument(
+        "--vocab-source",
+        type=Path,
+        default=Path(__file__).resolve().parents[1] / "input.txt",
+        help="Text file used to rebuild the character vocabulary",
+    )
     args = parser.parse_args()
 
+    weights = load_weights(args.weights)
+
+    if args.sample:
+        if args.token_id is not None or args.pos_id is not None or args.context_tokens:
+            parser.error("--sample cannot be combined with --token-id, --pos-id, or --context-tokens")
+        if args.generate < 0:
+            parser.error("--generate must be non-negative")
+        if args.samples < 0:
+            parser.error("--samples must be non-negative")
+        if args.temperature <= 0:
+            parser.error("--temperature must be positive")
+        try:
+            chars, bos = load_vocab(args.vocab_source)
+            random.seed(args.seed)
+            run_samples(
+                weights,
+                chars,
+                bos,
+                args.samples,
+                args.generate,
+                args.temperature,
+            )
+        except ValueError as exc:
+            parser.error(str(exc))
+        return
+
+    if args.token_id is None or args.pos_id is None:
+        parser.error("provide either --sample or both --token-id and --pos-id")
     if not 0 <= args.token_id < VOCAB_SIZE:
         parser.error(f"token-id must be in [0, {VOCAB_SIZE - 1}]")
     if not 0 <= args.pos_id < BLOCK_SIZE:
@@ -221,7 +344,6 @@ def main() -> None:
     if args.context_tokens and len(args.context_tokens) != args.pos_id:
         parser.error("the number of context tokens must equal pos-id")
 
-    weights = load_weights(args.weights)
     keys: list[list[float]] = []
     values: list[list[float]] = []
 

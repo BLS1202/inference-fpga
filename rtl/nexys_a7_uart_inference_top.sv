@@ -3,9 +3,10 @@
 // Nexys A7 UART wrapper for top_inference.
 //
 // UART protocol:
-//   RX byte 0: token_id in the low TOKEN_WIDTH bits
-//   RX byte 1: pos_id in the low POS_WIDTH bits
-//   TX byte 0: next_token in the low TOKEN_WIDTH bits
+//   RX byte 0: first token_id in the low TOKEN_WIDTH bits
+//   Press BTNC once for each inference step after the first token is received.
+//   TX bytes : all generated next_token values in the low TOKEN_WIDTH bits
+//              after BOS/EOS or the 16-token context limit is reached.
 //
 // For the current 20 ns / 50 MHz project clock and 115200 baud:
 //   CLKS_PER_BIT = 50_000_000 / 115200 ~= 434
@@ -34,16 +35,18 @@ module nexys_a7_uart_inference_top #(
     localparam int TOKEN_WIDTH = (VOCAB_SIZE <= 1) ? 1 : $clog2(VOCAB_SIZE);
     localparam int POS_WIDTH = (BLOCK_SIZE <= 1) ? 1 : $clog2(BLOCK_SIZE);
     localparam logic [7:0] VOCAB_SIZE_BYTE = 8'(VOCAB_SIZE);
-    localparam logic [7:0] BLOCK_SIZE_BYTE = 8'(BLOCK_SIZE);
+    localparam int BOS_TOKEN = VOCAB_SIZE - 1;
 
     typedef enum logic [3:0] {
         ST_WAIT_TOKEN,
-        ST_WAIT_POS,
         ST_WAIT_BUTTON,
         ST_CLEAR,
         ST_START_0,
         ST_START_1,
         ST_WAIT_CORE,
+        ST_STORE_RESULT,
+        ST_ADVANCE,
+        ST_TX_LOAD,
         ST_TX_SEND,
         ST_TX_WAIT
     } state_t;
@@ -51,7 +54,6 @@ module nexys_a7_uart_inference_top #(
     state_t state;
 
     logic clk_50mhz, clk_locked;
-    assign clk_locked = 0;
     clk_wiz_0 clk_wiz_i (
         .clk_in1(CLK100MHZ),
         .reset(sw[1]),
@@ -87,7 +89,10 @@ module nexys_a7_uart_inference_top #(
     logic end_token;
     logic [5:0] core_debug_state;
     logic protocol_error;
-    logic [15:0] sevenseg_value;
+    logic [31:0] sevenseg_value;
+    logic [TOKEN_WIDTH-1:0] generated_tokens [0:BLOCK_SIZE-1];
+    logic [POS_WIDTH:0] generated_count;
+    logic [POS_WIDTH:0] tx_index;
 
     always_ff @(posedge clk_50mhz or posedge sw[1]) begin
         if (sw[1]) begin
@@ -176,6 +181,11 @@ module nexys_a7_uart_inference_top #(
             uart_tx_valid <= 1'b0;
             uart_tx_data <= '0;
             protocol_error <= 1'b0;
+            generated_count <= '0;
+            tx_index <= '0;
+            for (int i = 0; i < BLOCK_SIZE; i++) begin
+                generated_tokens[i] <= '0;
+            end
         end else begin
             core_start <= 1'b0;
             clear_kv_cache <= 1'b0;
@@ -186,26 +196,20 @@ module nexys_a7_uart_inference_top #(
                     if (uart_rx_valid) begin
                         if (!uart_frame_error && (uart_rx_data < VOCAB_SIZE_BYTE)) begin
                             token_id <= TOKEN_WIDTH'(uart_rx_data);
-                            state <= ST_WAIT_POS;
-                        end else begin
-                            protocol_error <= 1'b1;
-                        end
-                    end
-                end
-
-                ST_WAIT_POS: begin
-                    if (uart_rx_valid) begin
-                        if (!uart_frame_error && (uart_rx_data < BLOCK_SIZE_BYTE)) begin
-                            pos_id <= POS_WIDTH'(uart_rx_data);
+                            pos_id <= '0;
+                            generated_count <= '0;
+                            tx_index <= '0;
                             state <= ST_WAIT_BUTTON;
                         end else begin
                             protocol_error <= 1'b1;
-                            state <= ST_WAIT_TOKEN;
                         end
                     end
                 end
 
                 ST_WAIT_BUTTON: begin
+                    // Debug stepping mode: every core invocation is launched
+                    // by one debounced BTNC pulse. Only the first step clears
+                    // the KV cache; later steps continue the same sequence.
                     if (button_pressed_pulse) begin
                         if (pos_id == '0)
                             state <= ST_CLEAR;
@@ -231,20 +235,51 @@ module nexys_a7_uart_inference_top #(
 
                 ST_WAIT_CORE: begin
                     if (core_valid)
+                        state <= ST_STORE_RESULT;
+                end
+
+                ST_STORE_RESULT: begin
+                    generated_tokens[generated_count] <= next_token;
+                    generated_count <= generated_count + 1'b1;
+                    state <= ST_ADVANCE;
+                end
+
+                ST_ADVANCE: begin
+                    if (end_token ||
+                        (next_token == TOKEN_WIDTH'(BOS_TOKEN)) ||
+                        (pos_id == POS_WIDTH'(BLOCK_SIZE - 1))) begin
+                        tx_index <= '0;
+                        state <= ST_TX_LOAD;
+                    end else begin
+                        token_id <= next_token;
+                        pos_id <= pos_id + 1'b1;
+                        // Wait for the next button press instead of launching
+                        // the next autoregressive step immediately.
+                        state <= ST_WAIT_BUTTON;
+                    end
+                end
+
+                ST_TX_LOAD: begin
+                    if (tx_index == generated_count) begin
+                        state <= ST_WAIT_TOKEN;
+                    end else if (uart_tx_ready) begin
+                        uart_tx_data <= {{(8-TOKEN_WIDTH){1'b0}}, generated_tokens[tx_index]};
                         state <= ST_TX_SEND;
+                    end
                 end
 
                 ST_TX_SEND: begin
                     if (uart_tx_ready) begin
-                        uart_tx_data <= {{(8-TOKEN_WIDTH){1'b0}}, next_token};
                         uart_tx_valid <= 1'b1;
                         state <= ST_TX_WAIT;
                     end
                 end
 
                 ST_TX_WAIT: begin
-                    if (uart_tx_done)
-                        state <= ST_WAIT_TOKEN;
+                    if (uart_tx_done) begin
+                        tx_index <= tx_index + 1'b1;
+                        state <= ST_TX_LOAD;
+                    end
                 end
 
                 default: begin
@@ -258,6 +293,8 @@ module nexys_a7_uart_inference_top #(
         sevenseg_value = '0;
         sevenseg_value[5:0] = core_debug_state;
         sevenseg_value[13:8] = 6'(state);
+        sevenseg_value[20:16] = token_id;
+        sevenseg_value[28:24] = generated_tokens[0]; 
 
         LED = '0;
         LED[0] = core_busy;
